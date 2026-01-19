@@ -14,7 +14,7 @@ public class MemberResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MemberCreateDTO{
-        Long id;
-        LocalDateTime createdAt;
+        private Long id;
+        private LocalDateTime createdAt;
     }
 }
