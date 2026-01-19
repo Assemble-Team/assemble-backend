@@ -27,8 +27,10 @@ public class Chat extends BaseEntity {
     private Club club;
 
     @OneToMany(mappedBy = "chat")
+    @Builder.Default
     private List<ChatRead> chatReadList = new ArrayList<>();
 
     @OneToMany(mappedBy = "chat")
+    @Builder.Default
     private List<ChatMessage> chatMessageList = new ArrayList<>();
 }

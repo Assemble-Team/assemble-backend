@@ -51,18 +51,23 @@ public class Club extends BaseEntity {
     private Chat chat;
 
     @OneToMany(mappedBy = "club")
+    @Builder.Default
     private List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
+    @Builder.Default
     private List<MemberLikesClub> memberLikesClubList = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
+    @Builder.Default
     private List<MemberClub> memberClubList = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
+    @Builder.Default
     private List<ClubJoinRequest> clubJoinRequestList = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
+    @Builder.Default
     private List<Schedule>  scheduleList = new ArrayList<>();
 
 }

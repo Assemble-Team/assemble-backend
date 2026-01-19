@@ -38,9 +38,11 @@ public class Board extends BaseEntity {
     private Club club;
 
     @OneToMany(mappedBy = "board")
+    @Builder.Default
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
+    @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 
 }

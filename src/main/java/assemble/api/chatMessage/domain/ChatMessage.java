@@ -26,6 +26,7 @@ public class ChatMessage extends BaseEntity {
     private String content;
 
     @OneToMany(mappedBy = "lastReadMessage")
+    @Builder.Default
     private List<ChatRead> chatReadList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

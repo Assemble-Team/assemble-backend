@@ -68,32 +68,42 @@ public class Member extends BaseEntity {
     private boolean scheduleReminderEnabled = true;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<ChatRead> chatReadList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<ChatMessage> chatMessageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<MemberLikesClub> memberLikesClubList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<MemberClub> memberClubList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<ClubJoinRequest> clubJoinRequestList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Notification> notificationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<MemberSchedule> memberScheduleList = new ArrayList<>();
 }

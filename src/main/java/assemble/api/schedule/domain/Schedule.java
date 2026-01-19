@@ -31,5 +31,6 @@ public class Schedule extends BaseEntity {
     private Club club;
 
     @OneToMany(mappedBy = "schedule")
+    @Builder.Default
     private List<MemberSchedule> memberScheduleList = new ArrayList<>();
 }
