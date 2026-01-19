@@ -16,7 +16,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,22 +32,40 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, length = 30)
+    private String email;
+
     @Column(nullable = false, length = 30)
     private String username;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 30)
+    private String password;
+
     private String description;
 
     private String url;
 
+    @ElementCollection(targetClass = InterestCategory.class)
+    @CollectionTable(
+            name = "member_interest_category",
+            joinColumns = @JoinColumn(name = "member_id")
+    )
     @Enumerated(EnumType.STRING)
-    private InterestCategory category;
+    @Column(name = "category")
+    @Builder.Default
+    private Set<InterestCategory> categories = new HashSet<>();
 
-    private boolean pushEnabled;
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean pushEnabled = true;
 
-    private boolean chatEnabled;
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean chatEnabled = true;
 
-    private boolean scheduleReminderEnabled;
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean scheduleReminderEnabled = true;
 
     @OneToMany(mappedBy = "member")
     private List<Board> boardList = new ArrayList<>();
