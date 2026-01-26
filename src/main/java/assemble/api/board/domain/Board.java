@@ -2,7 +2,7 @@ package assemble.api.board.domain;
 
 import assemble.api.club.domain.Club;
 import assemble.api.comment.domain.Comment;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.likes.domain.Likes;
 import assemble.api.member.domain.Member;
 import jakarta.persistence.*;
@@ -38,9 +38,11 @@ public class Board extends BaseEntity {
     private Club club;
 
     @OneToMany(mappedBy = "board")
+    @Builder.Default
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
+    @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 
 }

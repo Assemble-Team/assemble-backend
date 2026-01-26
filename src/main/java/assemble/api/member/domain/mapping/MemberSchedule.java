@@ -1,6 +1,6 @@
 package assemble.api.member.domain.mapping;
 
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.Member;
 import assemble.api.member.domain.enums.ScheduleStatus;
 import assemble.api.schedule.domain.Schedule;

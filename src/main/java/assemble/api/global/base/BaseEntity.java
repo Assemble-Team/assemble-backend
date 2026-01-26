@@ -1,4 +1,4 @@
-package assemble.api.common.base;
+package assemble.api.global.base;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

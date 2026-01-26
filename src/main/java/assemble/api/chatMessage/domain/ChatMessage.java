@@ -2,7 +2,7 @@ package assemble.api.chatMessage.domain;
 
 import assemble.api.chat.domain.Chat;
 import assemble.api.chat.domain.mapping.ChatRead;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +26,7 @@ public class ChatMessage extends BaseEntity {
     private String content;
 
     @OneToMany(mappedBy = "lastReadMessage")
+    @Builder.Default
     private List<ChatRead> chatReadList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

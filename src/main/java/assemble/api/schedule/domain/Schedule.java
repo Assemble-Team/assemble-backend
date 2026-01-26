@@ -1,7 +1,7 @@
 package assemble.api.schedule.domain;
 
 import assemble.api.club.domain.Club;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.mapping.MemberSchedule;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,5 +31,6 @@ public class Schedule extends BaseEntity {
     private Club club;
 
     @OneToMany(mappedBy = "schedule")
+    @Builder.Default
     private List<MemberSchedule> memberScheduleList = new ArrayList<>();
 }
