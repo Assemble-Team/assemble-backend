@@ -2,7 +2,7 @@ package assemble.api.chatMessage.domain;
 
 import assemble.api.chat.domain.Chat;
 import assemble.api.chat.domain.mapping.ChatRead;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;

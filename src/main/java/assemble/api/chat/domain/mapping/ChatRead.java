@@ -2,12 +2,10 @@ package assemble.api.chat.domain.mapping;
 
 import assemble.api.chat.domain.Chat;
 import assemble.api.chatMessage.domain.ChatMessage;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
 
 @Entity
 @Getter

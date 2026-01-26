@@ -2,7 +2,7 @@ package assemble.api.board.domain;
 
 import assemble.api.club.domain.Club;
 import assemble.api.comment.domain.Comment;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.likes.domain.Likes;
 import assemble.api.member.domain.Member;
 import jakarta.persistence.*;

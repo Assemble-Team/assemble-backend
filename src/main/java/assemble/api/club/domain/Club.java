@@ -4,7 +4,7 @@ import assemble.api.board.domain.Board;
 import assemble.api.chat.domain.Chat;
 import assemble.api.club.domain.enums.ClubStatus;
 import assemble.api.club.domain.enums.DifficultyLevel;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.mapping.ClubJoinRequest;
 import assemble.api.member.domain.mapping.MemberClub;
 import assemble.api.member.domain.mapping.MemberLikesClub;

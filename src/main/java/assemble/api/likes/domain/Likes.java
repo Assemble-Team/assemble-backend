@@ -1,7 +1,7 @@
 package assemble.api.likes.domain;
 
 import assemble.api.board.domain.Board;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;

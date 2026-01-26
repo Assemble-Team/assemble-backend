@@ -1,7 +1,7 @@
 package assemble.api.schedule.domain;
 
 import assemble.api.club.domain.Club;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.mapping.MemberSchedule;
 import jakarta.persistence.*;
 import lombok.*;

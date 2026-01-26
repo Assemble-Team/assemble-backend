@@ -4,7 +4,7 @@ import assemble.api.board.domain.Board;
 import assemble.api.chat.domain.mapping.ChatRead;
 import assemble.api.chatMessage.domain.ChatMessage;
 import assemble.api.comment.domain.Comment;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.likes.domain.Likes;
 import assemble.api.member.domain.enums.InterestCategory;
 import assemble.api.member.domain.mapping.ClubJoinRequest;
@@ -38,7 +38,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 30)
     private String username;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private String password;
 
     private String description;

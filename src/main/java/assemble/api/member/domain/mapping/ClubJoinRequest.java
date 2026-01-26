@@ -1,7 +1,7 @@
 package assemble.api.member.domain.mapping;
 
 import assemble.api.club.domain.Club;
-import assemble.api.common.base.BaseEntity;
+import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.Member;
 import assemble.api.member.domain.enums.JoinStatus;
 import jakarta.persistence.*;
