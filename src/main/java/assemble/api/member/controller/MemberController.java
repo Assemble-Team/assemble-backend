@@ -27,7 +27,6 @@ public class MemberController {
             description = "회원 정보로 회원가입하는 API"
     )
     public ResponseEntity<CommonResponse<MemberResponseDTO.MemberCreateDTO>> signUp(@RequestBody @Valid MemberRequestDTO.SignUpDTO signUpDTO) {
-        System.out.println(signUpDTO.getCategories());
         MemberResponseDTO.MemberCreateDTO result = memberService.signUpMember(signUpDTO);
         return new ResponseEntity<>(CommonResponse.created(result), HttpStatus.CREATED);
     }
