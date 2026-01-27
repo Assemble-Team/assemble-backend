@@ -4,9 +4,10 @@ import assemble.api.board.domain.Board;
 import assemble.api.chat.domain.Chat;
 import assemble.api.club.domain.enums.ClubStatus;
 import assemble.api.club.domain.enums.DifficultyLevel;
+import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.global.base.BaseEntity;
+import assemble.api.member.domain.enums.InterestCategory;
 import assemble.api.member.domain.mapping.ClubJoinRequest;
-import assemble.api.member.domain.mapping.MemberClub;
 import assemble.api.member.domain.mapping.MemberLikesClub;
 import assemble.api.schedule.domain.Schedule;
 import jakarta.persistence.*;
@@ -41,11 +42,16 @@ public class Club extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ClubStatus status;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private InterestCategory interestCategory;
+
     @Column(nullable = false, length = 255)
     private String description;
 
-    @Column(nullable = false)
     private Long maxNumbers;
+
+    private String imageUrl;
 
     @OneToOne(mappedBy = "club")
     private Chat chat;
