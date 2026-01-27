@@ -8,7 +8,7 @@ import assemble.api.global.base.BaseEntity;
 import assemble.api.likes.domain.Likes;
 import assemble.api.member.domain.enums.InterestCategory;
 import assemble.api.member.domain.mapping.ClubJoinRequest;
-import assemble.api.member.domain.mapping.MemberClub;
+import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.member.domain.mapping.MemberLikesClub;
 import assemble.api.member.domain.mapping.MemberSchedule;
 import assemble.api.notification.domain.Notification;
