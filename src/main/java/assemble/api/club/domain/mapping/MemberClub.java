@@ -1,4 +1,4 @@
-package assemble.api.member.domain.mapping;
+package assemble.api.club.domain.mapping;
 
 import assemble.api.club.domain.Club;
 import assemble.api.global.base.BaseEntity;
@@ -29,5 +29,14 @@ public class MemberClub extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
+
+    public static MemberClub create(Member member, Club club) {
+        return MemberClub.builder()
+                .member(member)
+                .club(club)
+                .role(Role.LEADER)
+                .build();
+    }
+
 
 }
