@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/clubs")
@@ -28,9 +25,21 @@ public class ClubController {
             summary = "소모임 생성 API",
             description = "소모임을 생성하는 API"
     )
-    public ResponseEntity<CommonResponse<ClubResponseDTO.CreateClubResultDTO>> makeClub(@AuthenticationPrincipal MemberDetail memberDetail,
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubResultDTO>> makeClub(@AuthenticationPrincipal MemberDetail memberDetail,
                                                       @RequestBody @Valid ClubRequestDTO.CreateClubDTO request){
-        ClubResponseDTO.CreateClubResultDTO result = clubService.createClub(memberDetail.getMember(), request);
+        ClubResponseDTO.ClubResultDTO result = clubService.createClub(memberDetail.getMember(), request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
+    }
+
+    @PatchMapping("/{clubId}")
+    @Operation(
+            summary = "소모임 설정 수정 API",
+            description = "소모임의 설정을 수정하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubResultDTO>> modifyClub(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                        @PathVariable Long clubId,
+                                                        @RequestBody @Valid ClubRequestDTO.UpdateClubDTO request){
+        ClubResponseDTO.ClubResultDTO result = clubService.updateClub(memberDetail.getMember(), clubId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result),   HttpStatus.OK);
     }
 }
