@@ -5,6 +5,7 @@ import assemble.api.auth.domain.MemberDetail;
 import assemble.api.club.dto.ClubRequestDTO;
 import assemble.api.club.dto.ClubResponseDTO;
 import assemble.api.club.service.ClubService;
+import assemble.api.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,17 @@ public class ClubController {
                                                         @PathVariable Long clubId,
                                                         @RequestBody @Valid ClubRequestDTO.UpdateClubDTO request){
         ClubResponseDTO.ClubResultDTO result = clubService.updateClub(memberDetail.getMember(), clubId, request);
-        return new ResponseEntity<>(CommonResponse.onSuccess(result),   HttpStatus.OK);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
+    }
+
+    @PostMapping("/{clubId}/likes")
+    @Operation(
+            summary = "소모임 좋아요/취소 API",
+            description = "관심있는 소모임에 좋아요를 누르거나 취소하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubLikesResultDTO>> createClubLikes(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                             @PathVariable Long clubId){
+        ClubResponseDTO.ClubLikesResultDTO result = clubService.createClubLikes(memberDetail.getMember(), clubId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 }
