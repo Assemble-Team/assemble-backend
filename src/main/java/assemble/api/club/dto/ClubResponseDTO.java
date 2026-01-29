@@ -13,8 +13,7 @@ public class ClubResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateClubResultDTO{
+    public static class ClubResultDTO{
         Long clubId;
-        LocalDateTime createdAt;
     }
 }
