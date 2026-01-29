@@ -16,4 +16,12 @@ public class ClubResponseDTO {
     public static class ClubResultDTO{
         Long clubId;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ClubLikesResultDTO{
+        boolean liked;
+    }
 }

@@ -11,4 +11,10 @@ public class ClubConverter {
                 .clubId(clubId)
                 .build();
     }
+
+    public static ClubResponseDTO.ClubLikesResultDTO toClubLikesResultDTO(boolean liked){
+        return ClubResponseDTO.ClubLikesResultDTO.builder()
+                .liked(liked)
+                .build();
+    }
 }
