@@ -6,10 +6,9 @@ import java.time.LocalDateTime;
 
 public class ClubConverter {
 
-    public static ClubResponseDTO.CreateClubResultDTO toCreateClubResultDTO(Long clubId){
-        return ClubResponseDTO.CreateClubResultDTO.builder()
+    public static ClubResponseDTO.ClubResultDTO toClubResultDTO(Long clubId){
+        return ClubResponseDTO.ClubResultDTO.builder()
                 .clubId(clubId)
-                .createdAt(LocalDateTime.now())
                 .build();
     }
 }

@@ -5,6 +5,8 @@ import assemble.api.chat.domain.Chat;
 import assemble.api.club.domain.enums.ClubStatus;
 import assemble.api.club.domain.enums.DifficultyLevel;
 import assemble.api.club.domain.mapping.MemberClub;
+import assemble.api.club.dto.ClubRequestDTO;
+import assemble.api.club.dto.ClubResponseDTO;
 import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.enums.InterestCategory;
 import assemble.api.member.domain.mapping.ClubJoinRequest;
@@ -75,5 +77,17 @@ public class Club extends BaseEntity {
     @OneToMany(mappedBy = "club")
     @Builder.Default
     private List<Schedule>  scheduleList = new ArrayList<>();
+
+    public void updateInfo(ClubRequestDTO.UpdateClubDTO request) {
+        if(request.getName() != null){
+            this.name = request.getName();
+        }
+        if(request.getDescription() != null){
+            this.description = request.getDescription();
+        }
+        if(request.getImageUrl() != null){
+            this.imageUrl = request.getImageUrl();
+        }
+    }
 
 }

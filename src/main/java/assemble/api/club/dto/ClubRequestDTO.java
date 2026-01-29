@@ -33,4 +33,16 @@ public class ClubRequestDTO {
 
         String imageUrl;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateClubDTO{
+        String name;
+
+        String description;
+
+        String imageUrl;
+    }
 }
