@@ -55,16 +55,30 @@ public class ClubController {
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
+    @GetMapping("/{clubId}")
+    @Operation(
+            summary = "소모임 상세 조회 API",
+            description = "소모임을 상세히 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubDetailResultDTO>> getClubDetail(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                           @PathVariable Long clubId){
+        ClubResponseDTO.ClubDetailResultDTO result = clubService.getClubDetailInfo(memberDetail.getMember(), clubId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
+
     @GetMapping("")
     @Operation(
             summary = "소모임 목록 조회 API",
             description = "소모임의 목록을 조회하는 API"
     )
-    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubListResultDTO>> getClubList(@AuthenticationPrincipal MemberDetail memberDetail,
+    public ResponseEntity<CommonResponse<ClubResponseDTO.FindClubListResultDTO>> getClubList(@AuthenticationPrincipal MemberDetail memberDetail,
                                                          @RequestParam(required = false) String region,
                                                          @RequestParam(required = false) String category,
-                                                         @RequestParam(required = true, defaultValue = "lastes") String sort){
-
-        return new ResponseEntity<>(CommonResponse.onSuccess(null),  HttpStatus.OK);
+                                                         @RequestParam(required = false) String level,
+                                                         @RequestParam(required = false) boolean recruiting,
+                                                         @RequestParam(defaultValue = "lastest") String sort){
+        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMember(), region, category, level, recruiting, sort);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
+
 }
