@@ -6,7 +6,6 @@ import assemble.api.club.domain.enums.ClubStatus;
 import assemble.api.club.domain.enums.DifficultyLevel;
 import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.club.dto.ClubRequestDTO;
-import assemble.api.club.dto.ClubResponseDTO;
 import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.enums.InterestCategory;
 import assemble.api.member.domain.mapping.ClubJoinRequest;
@@ -50,6 +49,8 @@ public class Club extends BaseEntity {
 
     @Column(nullable = false, length = 255)
     private String description;
+
+    private Long curNumbers;
 
     private Long maxNumbers;
 
