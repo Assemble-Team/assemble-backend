@@ -2,10 +2,14 @@ package assemble.api.club.business.finder;
 
 import assemble.api.apiPayload.handler.GeneralException;
 import assemble.api.apiPayload.status.ClubErrorStatus;
+import assemble.api.club.business.policy.ClubPolicy;
 import assemble.api.club.domain.Club;
 import assemble.api.club.repository.ClubRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -17,4 +21,9 @@ public class ClubFinder {
         return clubRepository.findById(clubId)
                 .orElseThrow(() -> new GeneralException(ClubErrorStatus.NOT_EXIST_CLUB));
     }
+
+    public List<Club> findClubs(String region, String category, String level, boolean recruiting, String sort) {
+        return clubRepository.findClubsBy(region, ClubPolicy.parseCategory(category), ClubPolicy.parseLevel(level), recruiting,  sort);
+    }
+
 }
