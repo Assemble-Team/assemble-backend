@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,5 +61,12 @@ public class ClubService {
         boolean liked = memberLikesClubPolicy.checkMemberLikesClubPolicy(member, club, memberLikesClub);
 
         return ClubConverter.toClubLikesResultDTO(liked);
+    }
+
+    public ClubResponseDTO.ClubDetailResultDTO getClubDetailInfo(Member member, Long clubId) {
+        Club club = clubFinder.findByClubId(clubId);
+        Long likesNum = memberLikesClubFinder.countByClub(clubId);
+        boolean liked = memberLikesClubFinder.existsByMemberAndClub(member.getId(), clubId);
+        return ClubConverter.toClubDetailResultDTO(club, likesNum, liked);
     }
 }
