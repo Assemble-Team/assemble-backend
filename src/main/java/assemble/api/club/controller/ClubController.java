@@ -54,4 +54,17 @@ public class ClubController {
         ClubResponseDTO.ClubLikesResultDTO result = clubService.createClubLikes(memberDetail.getMember(), clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
+
+    @GetMapping("")
+    @Operation(
+            summary = "소모임 목록 조회 API",
+            description = "소모임의 목록을 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubListResultDTO>> getClubList(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                         @RequestParam(required = false) String region,
+                                                         @RequestParam(required = false) String category,
+                                                         @RequestParam(required = true, defaultValue = "lastes") String sort){
+
+        return new ResponseEntity<>(CommonResponse.onSuccess(null),  HttpStatus.OK);
+    }
 }
