@@ -9,6 +9,7 @@ import assemble.api.member.repository.MemberLikesClubRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -19,5 +20,13 @@ public class MemberLikesClubFinder {
 
     public Optional<MemberLikesClub> findByMemberAndClub(Long memberId, Long clubId){
         return memberLikesClubRepository.findByMemberIdAndClubId(memberId, clubId);
+    }
+
+    public boolean existsByMemberAndClub(Long memberId, Long clubId){
+        return memberLikesClubRepository.countByMemberIdAndClubId(memberId, clubId) > 0;
+    }
+
+    public Long countByClub(Long clubId) {
+        return memberLikesClubRepository.countByClubId(clubId);
     }
 }

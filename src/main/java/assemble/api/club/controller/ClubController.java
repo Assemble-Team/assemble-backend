@@ -49,9 +49,20 @@ public class ClubController {
             summary = "소모임 좋아요/취소 API",
             description = "관심있는 소모임에 좋아요를 누르거나 취소하는 API"
     )
-    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubLikesResultDTO>> createClubLikes(@AuthenticationPrincipal MemberDetail memberDetail,
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubLikesResultDTO>> makeClubLikes(@AuthenticationPrincipal MemberDetail memberDetail,
                                                              @PathVariable Long clubId){
         ClubResponseDTO.ClubLikesResultDTO result = clubService.createClubLikes(memberDetail.getMember(), clubId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
+
+    @GetMapping("/{clubId}")
+    @Operation(
+            summary = "소모임 상세 조회 API",
+            description = "소모임을 상세히 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubDetailResultDTO>> getClubDetail(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                           @PathVariable Long clubId){
+        ClubResponseDTO.ClubDetailResultDTO result = clubService.getClubDetailInfo(memberDetail.getMember(), clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 }
