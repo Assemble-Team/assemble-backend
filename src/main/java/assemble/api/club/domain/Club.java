@@ -50,9 +50,13 @@ public class Club extends BaseEntity {
     @Column(nullable = false, length = 255)
     private String description;
 
-    private Long curNumbers;
+    @Builder.Default
+    private Long curNumbers = 1L;
 
     private Long maxNumbers;
+
+    @Builder.Default
+    private Long likesCount = 0L;
 
     private String imageUrl;
 
