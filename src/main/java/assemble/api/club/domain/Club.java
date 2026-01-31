@@ -95,4 +95,14 @@ public class Club extends BaseEntity {
         }
     }
 
+    public void increaseLikesCount(){
+        this.likesCount++;
+    }
+
+    public void decreaseLikesCount(){
+        if(this.likesCount > 0){
+            this.likesCount--;
+        }
+    }
+
 }
