@@ -18,10 +18,13 @@ import assemble.api.member.domain.mapping.MemberLikesClub;
 import assemble.api.member.repository.MemberLikesClubRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +71,11 @@ public class ClubService {
         Long likesNum = memberLikesClubFinder.countByClub(clubId);
         boolean liked = memberLikesClubFinder.existsByMemberAndClub(member.getId(), clubId);
         return ClubConverter.toClubDetailResultDTO(club, likesNum, liked);
+    }
+
+    public ClubResponseDTO.FindClubListResultDTO getClubListInfo(Member member, String region, String category, String level, boolean recruiting, String sort, Pageable pageable) {
+        Page<Club> clubPage = clubFinder.findClubs(region, category, level, recruiting, sort, pageable);
+        Set<Long> likedClubIds = memberLikesClubFinder.findLikedClubsByMember(member.getId());
+        return ClubConverter.toFindClubListResultDTO(clubPage, likedClubIds);
     }
 }

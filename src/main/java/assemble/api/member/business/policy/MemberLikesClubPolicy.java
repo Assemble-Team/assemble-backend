@@ -20,10 +20,12 @@ public class MemberLikesClubPolicy {
     public boolean checkMemberLikesClubPolicy(Member member, Club club, Optional<MemberLikesClub> memberLikesClub){
         if(memberLikesClub.isPresent()) {
             memberLikesClubRepository.delete(memberLikesClub.get());
+            club.decreaseLikesCount();
             return false;
         }
         MemberLikesClub newMemberLikesClub = memberLikesClubFactory.create(member, club);
         memberLikesClubRepository.save(newMemberLikesClub);
+        club.increaseLikesCount();
         return true;
     }
 }

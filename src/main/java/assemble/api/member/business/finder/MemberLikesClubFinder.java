@@ -9,8 +9,9 @@ import assemble.api.member.repository.MemberLikesClubRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -29,4 +30,11 @@ public class MemberLikesClubFinder {
     public Long countByClub(Long clubId) {
         return memberLikesClubRepository.countByClubId(clubId);
     }
+
+    public Set<Long> findLikedClubsByMember(Long memberId){
+        return memberLikesClubRepository.findBymemberId(memberId).stream()
+                .map(like -> like.getClub().getId())
+                .collect(Collectors.toSet());
+    }
+
 }

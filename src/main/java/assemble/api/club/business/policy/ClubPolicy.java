@@ -19,7 +19,10 @@ public class ClubPolicy {
     private final MemberClubRepository memberClubRepository;
 
     public static DifficultyLevel parseLevel(String level){
-        if(level.equals("LOW")){
+        if(level == null) {
+            return null;
+        }
+        else if(level.equals("LOW")){
             return DifficultyLevel.LOW;
         }
         else if(level.equals("MID")){
@@ -34,7 +37,10 @@ public class ClubPolicy {
     }
 
     public static InterestCategory parseCategory(String category){
-        if(category.equals("STUDY")){
+        if(category == null) {
+            return null;
+        }
+        else if(category.equals("STUDY")){
             return InterestCategory.STUDY;
         }
         else if(category.equals("EXERCISE")){
