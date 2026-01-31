@@ -14,6 +14,7 @@ public enum ClubErrorStatus implements ErrorReason {
     NOT_EXIST_CLUB(HttpStatus.BAD_REQUEST, "CLUB4003", "존재하지 않는 소모임입니다"),
     NOT_JOIN_MEMBER_AND_CLUB(HttpStatus.BAD_REQUEST, "CLUB4004", "해당 회원은 해당 소모임에 가입한 적이 없습니다"),
     UPDATE_PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "CLUB4005", "해당 회원은 소모임을 수정할 권한이 없습니다"),
+    CREATE_NOTICE_PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "CLUB4006", "해당 회원은 소모임의 공지사항을 생성할 권한이 없습니다"),
     ;
 
     private final HttpStatus httpStatus;
