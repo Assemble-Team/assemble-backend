@@ -50,6 +50,10 @@ public class ClubResponseDTO {
     @AllArgsConstructor
     public static class FindClubListResultDTO{
         private List<FindClubResultDTO> list;
+        private int page;
+        private int size;
+        private int totalPages;
+        private long totalElements;
     }
 
     @Builder

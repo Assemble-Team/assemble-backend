@@ -9,6 +9,9 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -19,9 +22,9 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Club> findClubsBy(String region, InterestCategory category, DifficultyLevel level, boolean recruiting, String sort) {
+    public Page<Club> findClubsBy(String region, InterestCategory category, DifficultyLevel level, boolean recruiting, String sort, Pageable pageable) {
         QClub club = QClub.club;
-        return queryFactory
+        List<Club> content = queryFactory
                 .selectFrom(club)
                 .where(
                         eqRegion(region),
@@ -30,7 +33,21 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
                         eqStatus(recruiting)
                 )
                 .orderBy(getSort(sort, club))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory
+                .select(club.count())
+                .from(club)
+                .where(
+                        eqRegion(region),
+                        eqCategory(category),
+                        eqDifficultyLevel(level),
+                        eqStatus(recruiting)
+                )
+                .fetchOne();
+        return  new PageImpl<>(content, pageable, total);
     }
 
     private BooleanExpression eqRegion(String region) {
@@ -46,7 +63,7 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
     }
 
     private BooleanExpression eqStatus(boolean status){
-        return status == true ? QClub.club.status.eq(ClubStatus.RECRUTING) : null;
+        return status ? QClub.club.status.eq(ClubStatus.RECRUTING) : null;
     }
 
     private OrderSpecifier<?> getSort(String sort, QClub club) {

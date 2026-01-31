@@ -9,6 +9,8 @@ import assemble.api.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -76,8 +78,11 @@ public class ClubController {
                                                          @RequestParam(required = false) String category,
                                                          @RequestParam(required = false) String level,
                                                          @RequestParam(required = false) boolean recruiting,
-                                                         @RequestParam(defaultValue = "lastest") String sort){
-        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMember(), region, category, level, recruiting, sort);
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size,
+                                                         @RequestParam(defaultValue = "latest") String sort){
+        Pageable pageable = PageRequest.of(page, size);
+        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMember(), region, category, level, recruiting, sort, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
 

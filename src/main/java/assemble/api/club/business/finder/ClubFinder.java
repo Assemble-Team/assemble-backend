@@ -6,6 +6,8 @@ import assemble.api.club.business.policy.ClubPolicy;
 import assemble.api.club.domain.Club;
 import assemble.api.club.repository.ClubRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,8 +24,8 @@ public class ClubFinder {
                 .orElseThrow(() -> new GeneralException(ClubErrorStatus.NOT_EXIST_CLUB));
     }
 
-    public List<Club> findClubs(String region, String category, String level, boolean recruiting, String sort) {
-        return clubRepository.findClubsBy(region, ClubPolicy.parseCategory(category), ClubPolicy.parseLevel(level), recruiting,  sort);
+    public Page<Club> findClubs(String region, String category, String level, boolean recruiting, String sort, Pageable pageable) {
+        return clubRepository.findClubsBy(region, ClubPolicy.parseCategory(category), ClubPolicy.parseLevel(level), recruiting,  sort, pageable);
     }
 
 }
