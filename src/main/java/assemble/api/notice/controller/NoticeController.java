@@ -31,4 +31,15 @@ public class NoticeController {
         NoticeResponseDTO.ClubNoticeResultDTO result = noticeService.createClubNotice(memberDetail.getMember(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
+
+    @GetMapping("/{clubId}/notice")
+    @Operation(
+            summary = "공지사항 목록 조회 API",
+            description = "가입한 소모임의 공지사항 목록을 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<NoticeResponseDTO.ClubNoticeListResultDTO>> getClubNotice(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                           @PathVariable Long clubId){
+        NoticeResponseDTO.ClubNoticeListResultDTO result = noticeService.getClubNoticeList(memberDetail.getMember(), clubId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
 }
