@@ -38,7 +38,7 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
                 .fetch();
 
         Long total = queryFactory
-                .select(club.count())
+                .select(club.id.countDistinct())
                 .from(club)
                 .where(
                         eqRegion(region),

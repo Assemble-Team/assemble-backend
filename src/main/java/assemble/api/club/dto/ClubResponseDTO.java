@@ -61,6 +61,7 @@ public class ClubResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class FindClubResultDTO{
+        private Long clubId;
         private String name;
         private String imageUrl;
         private String description;

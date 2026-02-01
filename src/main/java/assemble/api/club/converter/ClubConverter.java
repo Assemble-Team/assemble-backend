@@ -51,6 +51,7 @@ public class ClubConverter {
 
     public static ClubResponseDTO.FindClubResultDTO toFindClubResultDTO(Club club, boolean liked) {
         return ClubResponseDTO.FindClubResultDTO.builder()
+                .clubId(club.getId())
                 .name(club.getName())
                 .imageUrl(club.getImageUrl())
                 .description(club.getDescription())

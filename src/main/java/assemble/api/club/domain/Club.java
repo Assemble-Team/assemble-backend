@@ -10,6 +10,7 @@ import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.enums.InterestCategory;
 import assemble.api.member.domain.mapping.ClubJoinRequest;
 import assemble.api.member.domain.mapping.MemberLikesClub;
+import assemble.api.notice.domain.Notice;
 import assemble.api.schedule.domain.Schedule;
 import jakarta.persistence.*;
 import lombok.*;
@@ -75,13 +76,17 @@ public class Club extends BaseEntity {
     @Builder.Default
     private List<MemberClub> memberClubList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
     @Builder.Default
     private List<ClubJoinRequest> clubJoinRequestList = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
     @Builder.Default
     private List<Schedule>  scheduleList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club")
+    @Builder.Default
+    private List<Notice> noticeList = new ArrayList<>();
 
     public void updateInfo(ClubRequestDTO.UpdateClubDTO request) {
         if(request.getName() != null){
