@@ -44,5 +44,7 @@ public class ClubRequestDTO {
         String description;
 
         String imageUrl;
+
+        Long maxNumber;
     }
 }
