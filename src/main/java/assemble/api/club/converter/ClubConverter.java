@@ -1,7 +1,9 @@
 package assemble.api.club.converter;
 
 import assemble.api.club.domain.Club;
+import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.club.dto.ClubResponseDTO;
+import assemble.api.member.domain.Member;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
@@ -63,6 +65,29 @@ public class ClubConverter {
                 .maxNumbers(club.getMaxNumbers())
                 .likes(club.getLikesCount())
                 .liked(liked)
+                .build();
+    }
+
+    public static ClubResponseDTO.ClubMemberListResultDTO toClubMemberListResultDTO(List<MemberClub> memberClubList, Long clubId) {
+        List<ClubResponseDTO.ClubMemberDTO> list = memberClubList.stream()
+                .map(memberClub -> {
+                    Member member = memberClub.getMember();
+                    return toClubMemberDTO(member, memberClub);
+                }).toList();
+        return ClubResponseDTO.ClubMemberListResultDTO.builder()
+                .list(list)
+                .clubMemberNum(list.size())
+                .clubId(clubId)
+                .build();
+    }
+
+    public static ClubResponseDTO.ClubMemberDTO toClubMemberDTO(Member member, MemberClub memberClub) {
+        return ClubResponseDTO.ClubMemberDTO.builder()
+                .memberId(member.getId())
+                .role(memberClub.getRole())
+                .name(member.getUsername())
+                .description(member.getDescription())
+                .imageUrl(member.getUrl())
                 .build();
     }
 }
