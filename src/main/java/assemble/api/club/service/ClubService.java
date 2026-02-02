@@ -2,6 +2,7 @@ package assemble.api.club.service;
 
 import assemble.api.club.business.factory.ClubFactory;
 import assemble.api.club.business.finder.ClubFinder;
+import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.ClubPolicy;
 import assemble.api.club.converter.ClubConverter;
 import assemble.api.club.domain.Club;
@@ -35,6 +36,7 @@ public class ClubService {
     private final ClubFinder clubFinder;
     private final ClubPolicy clubPolicy;
     private final ClubRepository clubRepository;
+    private final MemberClubFinder  memberClubFinder;
     private final MemberClubRepository memberClubRepository;
     private final MemberLikesClubFinder memberLikesClubFinder;
     private final MemberLikesClubPolicy memberLikesClubPolicy;
@@ -77,5 +79,11 @@ public class ClubService {
         Page<Club> clubPage = clubFinder.findClubs(region, category, level, recruiting, sort, pageable);
         Set<Long> likedClubIds = memberLikesClubFinder.findLikedClubsByMember(member.getId());
         return ClubConverter.toFindClubListResultDTO(clubPage, likedClubIds);
+    }
+
+    public ClubResponseDTO.ClubMemberListResultDTO getClubMemberListInfo(Member member, Long clubId) {
+        Club club = clubFinder.findByClubId(clubId);
+        List<MemberClub> memberClubList = memberClubFinder.findByClub(club);
+        return ClubConverter.toClubMemberListResultDTO(memberClubList, clubId);
     }
 }

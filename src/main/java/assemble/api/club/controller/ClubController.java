@@ -86,4 +86,15 @@ public class ClubController {
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
 
+    @GetMapping("/{clubId}/members/list")
+    @Operation(
+            summary = "소모임 내 가입한 회원 목록 조회 API",
+            description = "소모임에 가입한 회원들의 목록을 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.ClubMemberListResultDTO>> getClubMemberList(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                              @PathVariable Long clubId){
+        ClubResponseDTO.ClubMemberListResultDTO result = clubService.getClubMemberListInfo(memberDetail.getMember(), clubId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
+
 }
