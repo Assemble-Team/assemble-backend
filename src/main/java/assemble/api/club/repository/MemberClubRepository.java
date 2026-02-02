@@ -5,9 +5,12 @@ import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberClubRepository extends JpaRepository<MemberClub, Long> {
 
     Optional<MemberClub> findByMemberAndClub(Member member, Club club);
+
+    List<MemberClub> findByClub(Club club);
 }

@@ -89,14 +89,17 @@ public class Club extends BaseEntity {
     private List<Notice> noticeList = new ArrayList<>();
 
     public void updateInfo(ClubRequestDTO.UpdateClubDTO request) {
-        if(request.getName() != null){
+        if(request.getName() != null && !request.getName().isBlank()){
             this.name = request.getName();
         }
-        if(request.getDescription() != null){
+        if(request.getDescription() != null && !request.getDescription().isBlank()){
             this.description = request.getDescription();
         }
-        if(request.getImageUrl() != null){
+        if(request.getImageUrl() != null && !request.getImageUrl().isBlank()){
             this.imageUrl = request.getImageUrl();
+        }
+        if(request.getMaxNumber() != null){
+            this.maxNumbers = request.getMaxNumber();
         }
     }
 

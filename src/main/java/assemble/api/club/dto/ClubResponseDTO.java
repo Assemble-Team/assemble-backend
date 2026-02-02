@@ -3,6 +3,7 @@ package assemble.api.club.dto;
 import assemble.api.club.domain.enums.ClubStatus;
 import assemble.api.club.domain.enums.DifficultyLevel;
 import assemble.api.member.domain.enums.InterestCategory;
+import assemble.api.member.domain.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -73,5 +74,27 @@ public class ClubResponseDTO {
         private Long maxNumbers;
         private Long likes;
         private boolean liked;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ClubMemberListResultDTO{
+        private Long clubId;
+        private List<ClubMemberDTO> list;
+        private long clubMemberNum;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ClubMemberDTO{
+        private Long memberId;
+        private String imageUrl;
+        private String name;
+        private String description;
+        private Role role;
     }
 }
