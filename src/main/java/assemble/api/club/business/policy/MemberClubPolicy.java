@@ -11,7 +11,7 @@ public class MemberClubPolicy {
 
     public void validateLeaderOrManager(MemberClub memberClub) {
         if(memberClub.getRole() == Role.MEMBER){
-            throw new GeneralException(ClubErrorStatus.CREATE_NOTICE_PERMISSION_DENIED);
+            throw new GeneralException(ClubErrorStatus.CREATE_PERMISSION_DENIED);
         }
     }
 
