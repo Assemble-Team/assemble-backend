@@ -1,0 +1,34 @@
+package assemble.api.schedule.controller;
+
+import assemble.api.apiPayload.CommonResponse;
+import assemble.api.auth.domain.MemberDetail;
+import assemble.api.schedule.dto.ScheduleRequestDTO;
+import assemble.api.schedule.dto.ScheduleResponseDTO;
+import assemble.api.schedule.service.ScheduleService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/clubs")
+public class ScheduleController {
+
+    private final ScheduleService scheduleService;
+
+    @PostMapping("/{clubId}/schedules")
+    @Operation(
+            summary = "소모임 일정 생성 API",
+            description = "소모임 내 일정을 생성하는 API"
+    )
+    public ResponseEntity<CommonResponse<ScheduleResponseDTO.CreateScheduleResultDTO>> makeSchedule(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                            @PathVariable Long clubId,
+                                                                            @RequestBody @Valid ScheduleRequestDTO.CreateScheduleDTO request){
+        ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.createSchedule(memberDetail.getMember(), clubId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
+}
