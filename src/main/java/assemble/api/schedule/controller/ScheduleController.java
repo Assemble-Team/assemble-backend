@@ -31,4 +31,17 @@ public class ScheduleController {
         ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.createSchedule(memberDetail.getMember(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
+
+    @PatchMapping("/{clubId}/schedules/{scheduleId}")
+    @Operation(
+            summary = "소모임 일정 수정 API",
+            description = "소모임 내 일정을 수정하는 API"
+    )
+    public ResponseEntity<CommonResponse<ScheduleResponseDTO.CreateScheduleResultDTO>> modifySchedule(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                            @PathVariable Long clubId,
+                                                            @PathVariable Long scheduleId,
+                                                            @RequestBody ScheduleRequestDTO.UpdateScheduleDTO request){
+        ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.updateSchedule(memberDetail.getMember(), clubId, scheduleId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
 }
