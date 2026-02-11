@@ -3,6 +3,7 @@ package assemble.api.schedule.domain;
 import assemble.api.club.domain.Club;
 import assemble.api.global.base.BaseEntity;
 import assemble.api.member.domain.mapping.MemberSchedule;
+import assemble.api.schedule.dto.ScheduleRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,4 +39,16 @@ public class Schedule extends BaseEntity {
     @OneToMany(mappedBy = "schedule")
     @Builder.Default
     private List<MemberSchedule> memberScheduleList = new ArrayList<>();
+
+    public void updateInfo(ScheduleRequestDTO.UpdateScheduleDTO request){
+        if(request.getTitle() != null && !request.getTitle().isBlank()){
+            this.title = request.getTitle();
+        }
+        if(request.getLocation() != null && !request.getLocation().isBlank()){
+            this.location = request.getLocation();
+        }
+        if(request.getStartAt() != null){
+            this.startAt = request.getStartAt();
+        }
+    }
 }
