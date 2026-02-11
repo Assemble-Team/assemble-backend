@@ -51,4 +51,13 @@ public class ScheduleService {
 
         return ScheduleConverter.toCreateScheduleResultDTO(schedule.getId());
     }
+
+    public void deleteSchedule(Member member, Long clubId, Long scheduleId) {
+        Club club = clubFinder.findByClubId(clubId);
+        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+        memberClubPolicy.validateLeaderOrManager(memberClub);
+
+        Schedule schedule = scheduleFinder.findByScheduleId(scheduleId);
+        scheduleRepository.delete(schedule);
+    }
 }

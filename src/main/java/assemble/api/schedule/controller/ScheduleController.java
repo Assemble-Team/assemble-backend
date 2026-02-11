@@ -44,4 +44,16 @@ public class ScheduleController {
         ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.updateSchedule(memberDetail.getMember(), clubId, scheduleId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{clubId}/schedules/{scheduleId}")
+    @Operation(
+            summary = "소모임 일정 삭제 API",
+            description = "소모임 내 일정을 삭제하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> deleteSchedule(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                            @PathVariable Long clubId,
+                                                            @PathVariable Long scheduleId){
+        scheduleService.deleteSchedule(memberDetail.getMember(), clubId, scheduleId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
 }
