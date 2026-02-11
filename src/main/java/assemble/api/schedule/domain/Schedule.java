@@ -22,8 +22,13 @@ public class Schedule extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private LocalDateTime startAt;
 
+    @Column(nullable = false)
     private String location;
 
     @ManyToOne(fetch = FetchType.LAZY)
