@@ -36,7 +36,7 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MemberSchedule> memberScheduleList = new ArrayList<>();
 
