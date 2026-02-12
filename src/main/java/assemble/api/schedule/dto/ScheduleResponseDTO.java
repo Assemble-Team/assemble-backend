@@ -14,4 +14,12 @@ public class ScheduleResponseDTO {
     public static class CreateScheduleResultDTO{
         Long scheduleId;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AttendScheduleResultDTO{
+        boolean attend;
+    }
 }

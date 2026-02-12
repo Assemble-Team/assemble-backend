@@ -9,4 +9,10 @@ public class ScheduleConverter {
                 .scheduleId(scheduleId)
                 .build();
     }
+
+    public static ScheduleResponseDTO.AttendScheduleResultDTO toAttendScheduleResultDTO(boolean attend) {
+        return ScheduleResponseDTO.AttendScheduleResultDTO.builder()
+                .attend(attend)
+                .build();
+    }
 }
