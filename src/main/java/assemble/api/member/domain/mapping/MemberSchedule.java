@@ -20,8 +20,7 @@ public class MemberSchedule extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private ScheduleStatus status = ScheduleStatus.PENDING;
+    private ScheduleStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -30,5 +29,9 @@ public class MemberSchedule extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
+    public void changeStatus(ScheduleStatus newStatus){
+        this.status = newStatus;
+    }
 
 }
