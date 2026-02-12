@@ -19,9 +19,16 @@ import assemble.api.schedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,12 +77,27 @@ public class ScheduleService {
 
     public ScheduleResponseDTO.AttendScheduleResultDTO attendClubSchedule(Member member, Long clubId, Long scheduleId) {
         Club club = clubFinder.findByClubId(clubId);
-        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+        memberClubFinder.findByMemberAndClub(member, club);
 
         Schedule schedule = scheduleFinder.findByScheduleId(scheduleId);
         Optional<MemberSchedule> memberSchedule = memberScheduleFinder.findByMemberAndSchedule(member, schedule);
 
         boolean attend = memberSchedulePolicy.attendOrCancel(memberSchedule, member, schedule);
         return ScheduleConverter.toAttendScheduleResultDTO(attend);
+    }
+
+    public ScheduleResponseDTO.GetScheduleListResultDTO getScheduleListInfo(Member member, Long clubId, Pageable pageable) {
+        Club club = clubFinder.findByClubId(clubId);
+        memberClubFinder.findByMemberAndClub(member, club);
+        
+        Page<Schedule> scheduleList = scheduleFinder.findByClubAndStartAtAfter(club, LocalDateTime.now(), pageable);
+        List<MemberSchedule> memberScheduleList = memberScheduleFinder.findByMemberAndSchedules(member, scheduleList);
+        Map<Long, MemberSchedule> memberScheduleMap = memberScheduleList.stream()
+                .collect(Collectors.toMap(
+                        ms -> ms.getSchedule().getId(),
+                        ms -> ms
+                ));
+
+        return ScheduleConverter.toGetScheduleListResultDTO(scheduleList, memberScheduleMap);
     }
 }

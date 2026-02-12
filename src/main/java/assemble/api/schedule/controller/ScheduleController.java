@@ -8,6 +8,9 @@ import assemble.api.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -66,6 +69,20 @@ public class ScheduleController {
                                                             @PathVariable Long clubId,
                                                             @PathVariable Long scheduleId){
         ScheduleResponseDTO.AttendScheduleResultDTO result = scheduleService.attendClubSchedule(memberDetail.getMember(), clubId, scheduleId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
+
+    @GetMapping("/{clubId}/schedule")
+    @Operation(
+            summary = "활동 일정 목록 조회",
+            description = "소모임 내 활동 일정 목록을 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ScheduleResponseDTO.GetScheduleListResultDTO>> getScheduleList(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                             @PathVariable Long clubId,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "startAt"));
+        ScheduleResponseDTO.GetScheduleListResultDTO result = scheduleService.getScheduleListInfo(memberDetail.getMember(), clubId, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 }
