@@ -56,4 +56,16 @@ public class ScheduleController {
         scheduleService.deleteSchedule(memberDetail.getMember(), clubId, scheduleId);
         return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
     }
+
+    @PostMapping("/{clubId}/schedules/{scheduleId}")
+    @Operation(
+            summary = "활동 참가/취소하기 API",
+            description = "소모임 내 활동에 참가하는 API"
+    )
+    public ResponseEntity<CommonResponse<ScheduleResponseDTO.AttendScheduleResultDTO>> attendSchedule(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                            @PathVariable Long clubId,
+                                                            @PathVariable Long scheduleId){
+        ScheduleResponseDTO.AttendScheduleResultDTO result = scheduleService.attendClubSchedule(memberDetail.getMember(), clubId, scheduleId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
 }

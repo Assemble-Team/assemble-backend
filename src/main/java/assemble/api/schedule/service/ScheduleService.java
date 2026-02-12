@@ -5,7 +5,10 @@ import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.MemberClubPolicy;
 import assemble.api.club.domain.Club;
 import assemble.api.club.domain.mapping.MemberClub;
+import assemble.api.member.business.finder.MemberScheduleFinder;
+import assemble.api.member.business.policy.MemberSchedulePolicy;
 import assemble.api.member.domain.Member;
+import assemble.api.member.domain.mapping.MemberSchedule;
 import assemble.api.schedule.business.factory.ScheduleFactory;
 import assemble.api.schedule.business.finder.ScheduleFinder;
 import assemble.api.schedule.converter.ScheduleConverter;
@@ -18,6 +21,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -25,8 +30,10 @@ public class ScheduleService {
 
     private final ClubFinder clubFinder;
     private final ScheduleFinder scheduleFinder;
+    private final MemberScheduleFinder  memberScheduleFinder;
     private final MemberClubFinder memberClubFinder;
     private final MemberClubPolicy memberClubPolicy;
+    private final MemberSchedulePolicy memberSchedulePolicy;
     private final ScheduleFactory scheduleFactory;
     private final ScheduleRepository scheduleRepository;
 
@@ -59,5 +66,16 @@ public class ScheduleService {
 
         Schedule schedule = scheduleFinder.findByScheduleId(scheduleId);
         scheduleRepository.delete(schedule);
+    }
+
+    public ScheduleResponseDTO.AttendScheduleResultDTO attendClubSchedule(Member member, Long clubId, Long scheduleId) {
+        Club club = clubFinder.findByClubId(clubId);
+        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+
+        Schedule schedule = scheduleFinder.findByScheduleId(scheduleId);
+        Optional<MemberSchedule> memberSchedule = memberScheduleFinder.findByMemberAndSchedule(member, schedule);
+
+        boolean attend = memberSchedulePolicy.attendOrCancel(memberSchedule, member, schedule);
+        return ScheduleConverter.toAttendScheduleResultDTO(attend);
     }
 }
