@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ScheduleErrorStatus implements ErrorReason {
 
-    NOT_EXIST_SCHEDULE(HttpStatus.BAD_REQUEST, "Schedule4001", "일정이 존재하지 않습니다"),
+    NOT_EXIST_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE4001", "일정이 존재하지 않습니다"),
 
     ;
 
