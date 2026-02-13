@@ -56,4 +56,16 @@ public class ClubRequestDTO {
         @NotNull
         String description;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ApproveOrRejectDTO{
+        @NotNull
+        Long memberId;
+
+        @NotNull
+        boolean approve;
+    }
 }
