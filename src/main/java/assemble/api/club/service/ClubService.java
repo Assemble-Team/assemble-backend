@@ -2,9 +2,12 @@ package assemble.api.club.service;
 
 import assemble.api.club.business.factory.ClubFactory;
 import assemble.api.club.business.factory.ClubJoinRequestFactory;
+import assemble.api.club.business.factory.MemberClubFactory;
 import assemble.api.club.business.finder.ClubFinder;
+import assemble.api.club.business.finder.ClubJoinRequestFinder;
 import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.ClubPolicy;
+import assemble.api.club.business.policy.MemberClubPolicy;
 import assemble.api.club.converter.ClubConverter;
 import assemble.api.club.domain.Club;
 import assemble.api.club.domain.mapping.ClubJoinRequest;
@@ -15,9 +18,11 @@ import assemble.api.club.repository.ClubJoinRequestRepository;
 import assemble.api.club.repository.ClubRepository;
 import assemble.api.club.repository.MemberClubRepository;
 import assemble.api.member.business.factory.MemberLikesClubFactory;
+import assemble.api.member.business.finder.MemberFinder;
 import assemble.api.member.business.finder.MemberLikesClubFinder;
 import assemble.api.member.business.policy.MemberLikesClubPolicy;
 import assemble.api.member.domain.Member;
+import assemble.api.member.domain.enums.JoinStatus;
 import assemble.api.member.domain.mapping.MemberLikesClub;
 import assemble.api.member.repository.MemberLikesClubRepository;
 import jakarta.transaction.Transactional;
@@ -44,8 +49,12 @@ public class ClubService {
     private final MemberClubFinder  memberClubFinder;
     private final MemberClubRepository memberClubRepository;
     private final MemberLikesClubFinder memberLikesClubFinder;
+    private final ClubJoinRequestFinder clubJoinRequestFinder;
     private final MemberLikesClubPolicy memberLikesClubPolicy;
     private final ClubJoinRequestRepository clubJoinRequestRepository;
+    private final MemberClubPolicy memberClubPolicy;
+    private final MemberClubFactory memberClubFactory;
+    private final MemberFinder memberFinder;
 
     public ClubResponseDTO.ClubResultDTO createClub(Member member, ClubRequestDTO.CreateClubDTO request) {
 
@@ -102,4 +111,17 @@ public class ClubService {
     }
 
 
+    public void approveOrReject(Member member, Long clubId, ClubRequestDTO.ApproveOrRejectDTO request) {
+        // 내가 승인할 수 있는 존재인지 확인
+        Club club = clubFinder.findByClubId(clubId);
+        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+        memberClubPolicy.validateLeaderOrManager(memberClub);
+
+        Member joinMember = memberFinder.findById(request.getMemberId());
+        ClubJoinRequest clubJoinRequest = clubJoinRequestFinder.findByMemberAndClub(joinMember, club);
+        clubJoinRequest.updateStatus(request.isApprove() ? JoinStatus.APPROVED : JoinStatus.REJECTED);
+
+        MemberClub newMemberClub = memberClubFactory.create(joinMember, club);
+        memberClubRepository.save(newMemberClub);
+    }
 }

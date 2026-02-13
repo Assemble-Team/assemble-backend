@@ -106,7 +106,18 @@ public class ClubController {
                                                                @PathVariable Long clubId,
                                                                @RequestBody @Valid ClubRequestDTO.JoinRequestDTO request){
         clubService.createJoinClubRequest(memberDetail.getMember(), clubId, request);
-        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK); // 가입 신청 id를 주는게 나으려나
     }
 
+    @PostMapping("/{clubId}/join")
+    @Operation(
+            summary = "소모임 가입 승인/거절 API",
+            description = "소모임 가입 신청을 승인 또는 거절하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> approveOrRejectRequest(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                    @PathVariable Long clubId,
+                                                                    @RequestBody @Valid ClubRequestDTO.ApproveOrRejectDTO request){
+        clubService.approveOrReject(memberDetail.getMember(), clubId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
 }
