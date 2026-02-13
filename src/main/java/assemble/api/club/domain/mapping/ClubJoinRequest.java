@@ -1,4 +1,4 @@
-package assemble.api.member.domain.mapping;
+package assemble.api.club.domain.mapping;
 
 import assemble.api.club.domain.Club;
 import assemble.api.global.base.BaseEntity;
