@@ -97,4 +97,16 @@ public class ClubController {
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
+    @PostMapping("/{clubId}/join/request")
+    @Operation(
+            summary = "소모임 가입 신청 API",
+            description = "원하는 소모임에 가입 신청을 하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> createJoinRequest(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                               @PathVariable Long clubId,
+                                                               @RequestBody @Valid ClubRequestDTO.JoinRequestDTO request){
+        clubService.createJoinClubRequest(memberDetail.getMember(), clubId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
+
 }

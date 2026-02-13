@@ -1,14 +1,17 @@
 package assemble.api.club.service;
 
 import assemble.api.club.business.factory.ClubFactory;
+import assemble.api.club.business.factory.ClubJoinRequestFactory;
 import assemble.api.club.business.finder.ClubFinder;
 import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.ClubPolicy;
 import assemble.api.club.converter.ClubConverter;
 import assemble.api.club.domain.Club;
+import assemble.api.club.domain.mapping.ClubJoinRequest;
 import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.club.dto.ClubRequestDTO;
 import assemble.api.club.dto.ClubResponseDTO;
+import assemble.api.club.repository.ClubJoinRequestRepository;
 import assemble.api.club.repository.ClubRepository;
 import assemble.api.club.repository.MemberClubRepository;
 import assemble.api.member.business.factory.MemberLikesClubFactory;
@@ -18,6 +21,7 @@ import assemble.api.member.domain.Member;
 import assemble.api.member.domain.mapping.MemberLikesClub;
 import assemble.api.member.repository.MemberLikesClubRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +37,7 @@ import java.util.Set;
 public class ClubService {
 
     private final ClubFactory clubFactory;
+    private final ClubJoinRequestFactory clubJoinRequestFactory;
     private final ClubFinder clubFinder;
     private final ClubPolicy clubPolicy;
     private final ClubRepository clubRepository;
@@ -40,6 +45,7 @@ public class ClubService {
     private final MemberClubRepository memberClubRepository;
     private final MemberLikesClubFinder memberLikesClubFinder;
     private final MemberLikesClubPolicy memberLikesClubPolicy;
+    private final ClubJoinRequestRepository clubJoinRequestRepository;
 
     public ClubResponseDTO.ClubResultDTO createClub(Member member, ClubRequestDTO.CreateClubDTO request) {
 
@@ -86,4 +92,14 @@ public class ClubService {
         List<MemberClub> memberClubList = memberClubFinder.findByClub(club);
         return ClubConverter.toClubMemberListResultDTO(memberClubList, clubId);
     }
+
+    public void createJoinClubRequest(Member member, Long clubId, ClubRequestDTO.JoinRequestDTO request) {
+        Club club = clubFinder.findByClubId(clubId);
+        memberClubFinder.checkNotExistMemberClub(member, club);
+
+        ClubJoinRequest clubJoinRequest = clubJoinRequestFactory.create(request.getDescription(), member, club);
+        clubJoinRequestRepository.save(clubJoinRequest);
+    }
+
+
 }
