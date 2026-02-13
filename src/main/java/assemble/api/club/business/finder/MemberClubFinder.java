@@ -30,4 +30,10 @@ public class MemberClubFinder {
         }
         return memberClubList;
     }
+
+    public void checkNotExistMemberClub(Member member, Club club) {
+        if(memberClubRepository.existsByMemberAndClub(member, club)){
+            throw new GeneralException(ClubErrorStatus.ALREADY_EXIST_MEMBER_CLUB);
+        }
+    }
 }
