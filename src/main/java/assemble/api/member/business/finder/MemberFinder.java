@@ -5,6 +5,7 @@ import assemble.api.apiPayload.status.MemberErrorStatus;
 import assemble.api.member.domain.Member;
 import assemble.api.member.repository.MemberRepository;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,5 +19,10 @@ public class MemberFinder {
     public Member findByEmail(String email){
         return memberRepository.findByEmail(email)
                 .orElseThrow(()-> new GeneralException(MemberErrorStatus.NOT_EXIST_EMAIL));
+    }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new GeneralException(MemberErrorStatus.NOT_EXIST_MEMBER));
     }
 }
