@@ -47,4 +47,13 @@ public class ClubRequestDTO {
 
         Long maxNumber;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JoinRequestDTO{
+        @NotNull
+        String description;
+    }
 }
