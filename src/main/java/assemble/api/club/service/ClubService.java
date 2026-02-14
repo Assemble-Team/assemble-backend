@@ -8,6 +8,7 @@ import assemble.api.club.business.finder.ClubJoinRequestFinder;
 import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.ClubPolicy;
 import assemble.api.club.business.policy.MemberClubPolicy;
+import assemble.api.club.business.validator.MemberClubValidator;
 import assemble.api.club.converter.ClubConverter;
 import assemble.api.club.domain.Club;
 import assemble.api.club.domain.mapping.ClubJoinRequest;
@@ -61,7 +62,7 @@ public class ClubService {
         Club club = clubFactory.create(request);
         clubRepository.save(club);
 
-        MemberClub memberClub = MemberClub.create(member, club);
+        MemberClub memberClub = memberClubFactory.create(member, club);
         memberClubRepository.save(memberClub);
 
         return ClubConverter.toClubResultDTO(club.getId());
@@ -112,7 +113,6 @@ public class ClubService {
 
 
     public void approveOrReject(Member member, Long clubId, ClubRequestDTO.ApproveOrRejectDTO request) {
-        // 내가 승인할 수 있는 존재인지 확인
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubPolicy.validateLeaderOrManager(memberClub);
@@ -123,5 +123,26 @@ public class ClubService {
 
         MemberClub newMemberClub = memberClubFactory.create(joinMember, club);
         memberClubRepository.save(newMemberClub);
+    }
+
+    public void changeAuthority(Member member, Long clubId, ClubRequestDTO.ChangeMemberAuthorityDTO request) {
+
+        Club club = clubFinder.findByClubId(clubId);
+        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+        memberClubPolicy.validateLeaderOrManager(memberClub);
+
+        Member joinMember = memberFinder.findById(request.getMemberId());
+        MemberClub joinMemberClub = memberClubFinder.findByMemberAndClub(joinMember, club);
+
+        joinMemberClub.changeRole(MemberClubValidator.parseRole(request.getAuthority()));
+    }
+
+    public ClubResponseDTO.GetJoinRequestListDTO getJoinRequestListInfo(Member member, Long clubId, Pageable pageable) {
+        Club club = clubFinder.findByClubId(clubId);
+        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+
+        Page<ClubJoinRequest> clubJoinRequestList = clubJoinRequestFinder.findByClubAndStatus(club, JoinStatus.PENDING, pageable);
+
+        return ClubConverter.toGetJoinRequestListDTO(clubJoinRequestList);
     }
 }
