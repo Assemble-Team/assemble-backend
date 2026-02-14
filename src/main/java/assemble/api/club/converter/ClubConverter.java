@@ -1,6 +1,7 @@
 package assemble.api.club.converter;
 
 import assemble.api.club.domain.Club;
+import assemble.api.club.domain.mapping.ClubJoinRequest;
 import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.club.dto.ClubResponseDTO;
 import assemble.api.member.domain.Member;
@@ -88,6 +89,47 @@ public class ClubConverter {
                 .name(member.getUsername())
                 .description(member.getDescription())
                 .imageUrl(member.getUrl())
+                .build();
+    }
+
+    public static ClubResponseDTO.GetJoinRequestListDTO toGetJoinRequestListDTO(Page<ClubJoinRequest> clubJoinRequestList) {
+        List<ClubResponseDTO.GetJoinRequestDTO> list = clubJoinRequestList.stream()
+                .map(ClubConverter::toGetJoinRequestDTO).toList();
+        return ClubResponseDTO.GetJoinRequestListDTO.builder()
+                .list(list)
+                .size(clubJoinRequestList.getSize())
+                .page(clubJoinRequestList.getNumber())
+                .totalPage(clubJoinRequestList.getTotalPages())
+                .build();
+    }
+
+    public static ClubResponseDTO.GetJoinRequestDTO toGetJoinRequestDTO(ClubJoinRequest request){
+        return ClubResponseDTO.GetJoinRequestDTO.builder()
+                .name(request.getMember().getUsername())
+                .memberId(request.getMember().getId())
+                .description(request.getMessage())
+                .imageUrl(request.getMember().getUrl())
+                .requestDate(request.getCreatedAt().toLocalDate())
+                .build();
+    }
+
+    public static ClubResponseDTO.GetClubMemberAuthorityListDTO toGetClubMemberAuthorityListDTO(Page<MemberClub> memberClubPage) {
+        List<ClubResponseDTO.GetClubMemberAuthorityDTO> list = memberClubPage.stream()
+                .map(ClubConverter::toGetClubMemberAuthorityDTO).toList();
+        return ClubResponseDTO.GetClubMemberAuthorityListDTO.builder()
+                .list(list)
+                .totalPage(memberClubPage.getTotalPages())
+                .size(memberClubPage.getSize())
+                .page(memberClubPage.getNumber())
+                .build();
+    }
+
+    public static ClubResponseDTO.GetClubMemberAuthorityDTO toGetClubMemberAuthorityDTO(MemberClub memberClub){
+        return ClubResponseDTO.GetClubMemberAuthorityDTO.builder()
+                .memberId(memberClub.getMember().getId())
+                .role(memberClub.getRole())
+                .imageUrl(memberClub.getMember().getUrl())
+                .name(memberClub.getMember().getUsername())
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package assemble.api.member.domain.mapping;
+package assemble.api.club.domain.mapping;
 
 import assemble.api.club.domain.Club;
 import assemble.api.global.base.BaseEntity;
@@ -31,4 +31,8 @@ public class ClubJoinRequest extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void updateStatus(JoinStatus status){
+        this.status = status;
+    }
 }

@@ -47,4 +47,37 @@ public class ClubRequestDTO {
 
         Long maxNumber;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JoinRequestDTO{
+        @NotNull
+        String description;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ApproveOrRejectDTO{
+        @NotNull
+        Long memberId;
+
+        @NotNull
+        boolean approve;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChangeMemberAuthorityDTO{
+        @NotNull
+        Long memberId;
+
+        @NotNull
+        String authority;
+    }
 }

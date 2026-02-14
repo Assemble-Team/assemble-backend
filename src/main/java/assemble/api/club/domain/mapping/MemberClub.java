@@ -30,12 +30,8 @@ public class MemberClub extends BaseEntity {
     @JoinColumn(name = "club_id")
     private Club club;
 
-    public static MemberClub create(Member member, Club club) {
-        return MemberClub.builder()
-                .member(member)
-                .club(club)
-                .role(Role.LEADER)
-                .build();
+    public void changeRole(Role role) {
+        this.role = role;
     }
 
 

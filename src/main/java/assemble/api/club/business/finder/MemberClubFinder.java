@@ -7,6 +7,8 @@ import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.club.repository.MemberClubRepository;
 import assemble.api.member.domain.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,5 +31,15 @@ public class MemberClubFinder {
             throw new GeneralException(ClubErrorStatus.NOT_EXIST_ANY_MEMBER_IN_CLUB);
         }
         return memberClubList;
+    }
+
+    public void checkNotExistMemberClub(Member member, Club club) {
+        if(memberClubRepository.existsByMemberAndClub(member, club)){
+            throw new GeneralException(ClubErrorStatus.ALREADY_EXIST_MEMBER_CLUB);
+        }
+    }
+
+    public Page<MemberClub> findByClubPage(Club club, Pageable pageable) {
+        return memberClubRepository.findByClub(club, pageable);
     }
 }

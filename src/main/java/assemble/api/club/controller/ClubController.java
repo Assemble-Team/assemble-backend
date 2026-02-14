@@ -97,4 +97,78 @@ public class ClubController {
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
+    @PostMapping("/{clubId}/join/request")
+    @Operation(
+            summary = "소모임 가입 신청 API",
+            description = "원하는 소모임에 가입 신청을 하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> createJoinRequest(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                               @PathVariable Long clubId,
+                                                               @RequestBody @Valid ClubRequestDTO.JoinRequestDTO request){
+        clubService.createJoinClubRequest(memberDetail.getMember(), clubId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
+
+    @PostMapping("/{clubId}/join")
+    @Operation(
+            summary = "소모임 가입 승인/거절 API",
+            description = "소모임 가입 신청을 승인 또는 거절하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> approveOrRejectRequest(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                    @PathVariable Long clubId,
+                                                                    @RequestBody @Valid ClubRequestDTO.ApproveOrRejectDTO request){
+        clubService.approveOrReject(memberDetail.getMember(), clubId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
+
+    @PostMapping("/{clubId}/permissions")
+    @Operation(
+            summary = "소모임 회원 권한 관리(운영진 임명/해임)",
+            description = "소모임의 회원들의 권한을 변경하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> changeMemberAuthority(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                   @PathVariable Long clubId,
+                                                                   @RequestBody @Valid ClubRequestDTO.ChangeMemberAuthorityDTO request){
+        clubService.changeAuthority(memberDetail.getMember(), clubId, request);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
+
+    @GetMapping("/{clubId}/join")
+    @Operation(
+            summary = "소모임 가입 신청 목록 조회 API",
+            description = "소모임에 가입 신청한 회원들의 목록을 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.GetJoinRequestListDTO>> getJoinRequestList(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                @PathVariable Long clubId,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        ClubResponseDTO.GetJoinRequestListDTO result = clubService.getJoinRequestListInfo(memberDetail.getMember(), clubId, pageable);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
+
+    @GetMapping("/{clubId}/permissions")
+    @Operation(
+            summary = "소모임 권한 관리 목록 조회 API",
+            description = "소모임의 회원들의 권한 목록을 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.GetClubMemberAuthorityListDTO>> getClubAuthorityList(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                  @PathVariable Long clubId,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        ClubResponseDTO.GetClubMemberAuthorityListDTO result = clubService.getClubAuthorityListInfo(memberDetail.getMember(), clubId, pageable);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{clubId}/leave")
+    @Operation(
+            summary = "소모임 탈퇴 API",
+            description = "가입한 소모임을 탈퇴하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> deleteMemberFromClub(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                  @PathVariable Long clubId){
+        clubService.deleteMemberClub(memberDetail.getMember(), clubId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
 }
