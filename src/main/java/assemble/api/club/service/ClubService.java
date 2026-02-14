@@ -145,4 +145,13 @@ public class ClubService {
 
         return ClubConverter.toGetJoinRequestListDTO(clubJoinRequestList);
     }
+
+    public ClubResponseDTO.GetClubMemberAuthorityListDTO getClubAuthorityListInfo(Member member, Long clubId, Pageable pageable) {
+        Club club = clubFinder.findByClubId(clubId);
+        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+
+        Page<MemberClub> memberClubPage = memberClubFinder.findByClubPage(club, pageable);
+
+        return ClubConverter.toGetClubMemberAuthorityListDTO(memberClubPage);
+    }
 }

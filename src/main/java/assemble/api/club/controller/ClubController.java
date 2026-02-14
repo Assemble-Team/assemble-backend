@@ -146,4 +146,18 @@ public class ClubController {
         ClubResponseDTO.GetJoinRequestListDTO result = clubService.getJoinRequestListInfo(memberDetail.getMember(), clubId, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
+
+    @GetMapping("/{clubId}/permissions")
+    @Operation(
+            summary = "소모임 권한 관리 목록 조회 API",
+            description = "소모임의 회원들의 권한 목록을 조회하는 API"
+    )
+    public ResponseEntity<CommonResponse<ClubResponseDTO.GetClubMemberAuthorityListDTO>> getClubAuthorityList(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                  @PathVariable Long clubId,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        ClubResponseDTO.GetClubMemberAuthorityListDTO result = clubService.getClubAuthorityListInfo(memberDetail.getMember(), clubId, pageable);
+        return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
+    }
 }
