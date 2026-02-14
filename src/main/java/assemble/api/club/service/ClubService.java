@@ -154,4 +154,10 @@ public class ClubService {
 
         return ClubConverter.toGetClubMemberAuthorityListDTO(memberClubPage);
     }
+
+    public void deleteMemberClub(Member member, Long clubId) {
+        Club club = clubFinder.findByClubId(clubId);
+        MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
+        memberClubRepository.delete(memberClub);
+    }
 }

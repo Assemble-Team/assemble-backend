@@ -160,4 +160,15 @@ public class ClubController {
         ClubResponseDTO.GetClubMemberAuthorityListDTO result = clubService.getClubAuthorityListInfo(memberDetail.getMember(), clubId, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{clubId}/leave")
+    @Operation(
+            summary = "소모임 탈퇴 API",
+            description = "가입한 소모임을 탈퇴하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> deleteMemberFromClub(@AuthenticationPrincipal MemberDetail memberDetail,
+                                                                  @PathVariable Long clubId){
+        clubService.deleteMemberClub(memberDetail.getMember(), clubId);
+        return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
+    }
 }
