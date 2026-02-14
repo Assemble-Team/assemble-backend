@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,14 +36,14 @@ public class ClubResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ClubDetailResultDTO{
-        private String clubName;
-        private String description;
-        private String region;
-        private String imageUrl;
-        private InterestCategory category;
-        private DifficultyLevel level;
-        private Long likesNum;
-        private boolean liked;
+        String clubName;
+        String description;
+        String region;
+        String imageUrl;
+        InterestCategory category;
+        DifficultyLevel level;
+        Long likesNum;
+        boolean liked;
     }
 
     @Builder
@@ -50,11 +51,11 @@ public class ClubResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class FindClubListResultDTO{
-        private List<FindClubResultDTO> list;
-        private int page;
-        private int size;
-        private int totalPages;
-        private long totalElements;
+        List<FindClubResultDTO> list;
+        int page;
+        int size;
+        int totalPages;
+        long totalElements;
     }
 
     @Builder
@@ -62,18 +63,18 @@ public class ClubResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class FindClubResultDTO{
-        private Long clubId;
-        private String name;
-        private String imageUrl;
-        private String description;
-        private InterestCategory category;
-        private DifficultyLevel level;
-        private String region;
-        private ClubStatus status;
-        private Long curNumbers;
-        private Long maxNumbers;
-        private Long likes;
-        private boolean liked;
+        Long clubId;
+        String name;
+        String imageUrl;
+        String description;
+        InterestCategory category;
+        DifficultyLevel level;
+        String region;
+        ClubStatus status;
+        Long curNumbers;
+        Long maxNumbers;
+        Long likes;
+        boolean liked;
     }
 
     @Builder
@@ -81,9 +82,9 @@ public class ClubResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ClubMemberListResultDTO{
-        private Long clubId;
-        private List<ClubMemberDTO> list;
-        private long clubMemberNum;
+        Long clubId;
+        List<ClubMemberDTO> list;
+        long clubMemberNum;
     }
 
     @Builder
@@ -91,10 +92,33 @@ public class ClubResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ClubMemberDTO{
-        private Long memberId;
-        private String imageUrl;
-        private String name;
-        private String description;
-        private Role role;
+        Long memberId;
+        String imageUrl;
+        String name;
+        String description;
+        Role role;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetJoinRequestListDTO{
+        List<GetJoinRequestDTO> list;
+        int page;
+        int size;
+        int totalPage;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetJoinRequestDTO{
+        LocalDate requestDate;
+        Long memberId;
+        String name;
+        String imageUrl;
+        String description;
     }
 }
