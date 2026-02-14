@@ -68,4 +68,16 @@ public class ClubRequestDTO {
         @NotNull
         boolean approve;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChangeMemberAuthorityDTO{
+        @NotNull
+        Long memberId;
+
+        @NotNull
+        String authority;
+    }
 }
