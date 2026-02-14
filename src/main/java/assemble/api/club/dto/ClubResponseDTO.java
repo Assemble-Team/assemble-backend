@@ -121,4 +121,26 @@ public class ClubResponseDTO {
         String imageUrl;
         String description;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetClubMemberAuthorityListDTO{
+        List<GetClubMemberAuthorityDTO> list;
+        int size;
+        int page;
+        int totalPage;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetClubMemberAuthorityDTO{
+        Long memberId;
+        String name;
+        String imageUrl;
+        Role role;
+    }
 }

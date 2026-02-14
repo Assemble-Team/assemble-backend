@@ -112,4 +112,24 @@ public class ClubConverter {
                 .requestDate(request.getCreatedAt().toLocalDate())
                 .build();
     }
+
+    public static ClubResponseDTO.GetClubMemberAuthorityListDTO toGetClubMemberAuthorityListDTO(Page<MemberClub> memberClubPage) {
+        List<ClubResponseDTO.GetClubMemberAuthorityDTO> list = memberClubPage.stream()
+                .map(ClubConverter::toGetClubMemberAuthorityDTO).toList();
+        return ClubResponseDTO.GetClubMemberAuthorityListDTO.builder()
+                .list(list)
+                .totalPage(memberClubPage.getTotalPages())
+                .size(memberClubPage.getSize())
+                .page(memberClubPage.getNumber())
+                .build();
+    }
+
+    public static ClubResponseDTO.GetClubMemberAuthorityDTO toGetClubMemberAuthorityDTO(MemberClub memberClub){
+        return ClubResponseDTO.GetClubMemberAuthorityDTO.builder()
+                .memberId(memberClub.getMember().getId())
+                .role(memberClub.getRole())
+                .imageUrl(memberClub.getMember().getUrl())
+                .name(memberClub.getMember().getUsername())
+                .build();
+    }
 }
