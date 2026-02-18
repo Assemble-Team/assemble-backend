@@ -24,6 +24,6 @@ public class MemberDetailService implements UserDetailsService {
     public MemberDetail loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Member> member = memberRepository.findByEmail((email));
         if(member.isEmpty()) throw new UsernameNotFoundException("해당 유저를 찾을 수 없습니다");
-        return MemberDetail.createMemberDetail(member.get());
+        return MemberDetail.of(member.get());
     }
 }
