@@ -4,7 +4,11 @@ import assemble.api.apiPayload.handler.GeneralException;
 import assemble.api.apiPayload.status.JwtErrorStatus;
 import assemble.api.auth.domain.MemberDetail;
 import assemble.api.auth.service.MemberDetailService;
+import assemble.api.member.business.finder.MemberFinder;
+import assemble.api.member.domain.Member;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,22 +16,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+
+import java.security.Key;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtTokenProvider {
+public class JwtTokenProvider { // JWT 토큰 생성, 검증, 인증 객체 반환 등의 역할 수행
 
     private final MemberDetailService memberDetailService;
+    private final MemberFinder memberFinder;
 
     @Value("${jwt.token.secret}")
     private String secret;
@@ -38,65 +42,48 @@ public class JwtTokenProvider {
     @Value("${jwt.token.refresh-expiration}")
     private Long refreshExpiration;
 
-    public String createAccessToken(String email, Long memberId){
-        return createToken(email, memberId, accessExpiration);
+    private Key secretKey;
+
+    @PostConstruct
+    public void init(){
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String createRefreshToken(String email, Long memberId){
-        return createToken(email, memberId, refreshExpiration);
+    public String generateAccessToken(Authentication authentication){
+        MemberDetail memberDetail = (MemberDetail) authentication.getPrincipal();
+        return generateToken(memberDetail.getUsername(), memberDetail.getMemberId(), memberDetail.getAuthorities(), accessExpiration);
     }
 
-    public String createToken(String email, Long memberId, Long expiration){
-        Claims claims = Jwts.claims().setSubject(email);
+    public String generateRefreshToken(Authentication authentication){
+        MemberDetail memberDetail = (MemberDetail) authentication.getPrincipal();
+        return generateToken(memberDetail.getUsername(), memberDetail.getMemberId(), memberDetail.getAuthorities(), refreshExpiration);
+    }
+
+    public String generateToken(String subject, Long memberId, Collection<? extends GrantedAuthority> authorities, Long expiration){
+        Claims claims = Jwts.claims().setSubject(null);
         claims.put("memberId", memberId);
-        claims.put("email", email);
+
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
+                .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expiration))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(secretKey)
                 .compact();
     }
 
-    public Claims parseClaims(String token){
-        try{
-            return Jwts.parserBuilder()
-                    .setSigningKey(secret)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            log.error("Expired JWT token: {}", e.getMessage());
-            //throw new GeneralException(JwtErrorStatus.EXPIRED_TOKEN);
-        }
-        return null;
-    }
-
-    public Long getExpiration(String token){
+    public Long getRefreshExpiration(String token) {
         return parseClaims(token).getExpiration().getTime();
     }
 
-    public String getEmail(String token){
-        return parseClaims(token).get("email", String.class);
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
-
-    public boolean validateToken(String token) {
+    public Claims parseClaims(String token) {
         try{
-            Jwts.parserBuilder()
-                    .setSigningKey(secret)
+            return Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
             throw new GeneralException(JwtErrorStatus.WRONG_TYPE_SIGNATURE);
@@ -112,8 +99,18 @@ public class JwtTokenProvider {
         }
     }
 
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
     public Authentication getAuthentication(String token) {
-        MemberDetail memberDetail = memberDetailService.loadUserByUsername(this.getEmail(token));
+        Claims claims = parseClaims(token);
+        Member member = memberFinder.findById(claims.get("memberId", Long.class));
+        MemberDetail memberDetail = memberDetailService.loadUserByUsername(member.getEmail());
         return new UsernamePasswordAuthenticationToken(memberDetail, null, memberDetail.getAuthorities());
     }
 
