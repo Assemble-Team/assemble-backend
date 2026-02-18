@@ -31,7 +31,7 @@ public class BoardController {
     public ResponseEntity<CommonResponse<BoardResponseDTO.CreateBoardResultDTO>> makeBoard(@AuthenticationPrincipal MemberDetail memberDetail,
                                                                                            @RequestBody @Valid BoardRequestDTO.CreateBoardDTO request,
                                                                                            @PathVariable Long clubId){
-        BoardResponseDTO.CreateBoardResultDTO result = boardService.createBoard(memberDetail.getMember(), request, clubId);
+        BoardResponseDTO.CreateBoardResultDTO result = boardService.createBoard(memberDetail.getMemberId(), request, clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 

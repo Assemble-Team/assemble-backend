@@ -30,7 +30,7 @@ public class ClubController {
     )
     public ResponseEntity<CommonResponse<ClubResponseDTO.ClubResultDTO>> makeClub(@AuthenticationPrincipal MemberDetail memberDetail,
                                                       @RequestBody @Valid ClubRequestDTO.CreateClubDTO request){
-        ClubResponseDTO.ClubResultDTO result = clubService.createClub(memberDetail.getMember(), request);
+        ClubResponseDTO.ClubResultDTO result = clubService.createClub(memberDetail.getMemberId(), request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
 
@@ -42,7 +42,7 @@ public class ClubController {
     public ResponseEntity<CommonResponse<ClubResponseDTO.ClubResultDTO>> modifyClub(@AuthenticationPrincipal MemberDetail memberDetail,
                                                         @PathVariable Long clubId,
                                                         @RequestBody @Valid ClubRequestDTO.UpdateClubDTO request){
-        ClubResponseDTO.ClubResultDTO result = clubService.updateClub(memberDetail.getMember(), clubId, request);
+        ClubResponseDTO.ClubResultDTO result = clubService.updateClub(memberDetail.getMemberId(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
 
@@ -53,7 +53,7 @@ public class ClubController {
     )
     public ResponseEntity<CommonResponse<ClubResponseDTO.ClubLikesResultDTO>> createClubLikes(@AuthenticationPrincipal MemberDetail memberDetail,
                                                              @PathVariable Long clubId){
-        ClubResponseDTO.ClubLikesResultDTO result = clubService.createClubLikes(memberDetail.getMember(), clubId);
+        ClubResponseDTO.ClubLikesResultDTO result = clubService.createClubLikes(memberDetail.getMemberId(), clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -64,7 +64,7 @@ public class ClubController {
     )
     public ResponseEntity<CommonResponse<ClubResponseDTO.ClubDetailResultDTO>> getClubDetail(@AuthenticationPrincipal MemberDetail memberDetail,
                                                            @PathVariable Long clubId){
-        ClubResponseDTO.ClubDetailResultDTO result = clubService.getClubDetailInfo(memberDetail.getMember(), clubId);
+        ClubResponseDTO.ClubDetailResultDTO result = clubService.getClubDetailInfo(memberDetail.getMemberId(), clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -82,7 +82,7 @@ public class ClubController {
                                                          @RequestParam(defaultValue = "10") int size,
                                                          @RequestParam(defaultValue = "latest") String sort){
         Pageable pageable = PageRequest.of(page, size);
-        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMember(), region, category, level, recruiting, sort, pageable);
+        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMemberId(), region, category, level, recruiting, sort, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
 
@@ -93,7 +93,7 @@ public class ClubController {
     )
     public ResponseEntity<CommonResponse<ClubResponseDTO.ClubMemberListResultDTO>> getClubMemberList(@AuthenticationPrincipal MemberDetail memberDetail,
                                                               @PathVariable Long clubId){
-        ClubResponseDTO.ClubMemberListResultDTO result = clubService.getClubMemberListInfo(memberDetail.getMember(), clubId);
+        ClubResponseDTO.ClubMemberListResultDTO result = clubService.getClubMemberListInfo(clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -105,7 +105,7 @@ public class ClubController {
     public ResponseEntity<CommonResponse<?>> createJoinRequest(@AuthenticationPrincipal MemberDetail memberDetail,
                                                                @PathVariable Long clubId,
                                                                @RequestBody @Valid ClubRequestDTO.JoinRequestDTO request){
-        clubService.createJoinClubRequest(memberDetail.getMember(), clubId, request);
+        clubService.createJoinClubRequest(memberDetail.getMemberId(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
     }
 
@@ -117,7 +117,7 @@ public class ClubController {
     public ResponseEntity<CommonResponse<?>> approveOrRejectRequest(@AuthenticationPrincipal MemberDetail memberDetail,
                                                                     @PathVariable Long clubId,
                                                                     @RequestBody @Valid ClubRequestDTO.ApproveOrRejectDTO request){
-        clubService.approveOrReject(memberDetail.getMember(), clubId, request);
+        clubService.approveOrReject(memberDetail.getMemberId(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
     }
 
@@ -129,7 +129,7 @@ public class ClubController {
     public ResponseEntity<CommonResponse<?>> changeMemberAuthority(@AuthenticationPrincipal MemberDetail memberDetail,
                                                                    @PathVariable Long clubId,
                                                                    @RequestBody @Valid ClubRequestDTO.ChangeMemberAuthorityDTO request){
-        clubService.changeAuthority(memberDetail.getMember(), clubId, request);
+        clubService.changeAuthority(memberDetail.getMemberId(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
     }
 
@@ -143,7 +143,7 @@ public class ClubController {
                                                                 @RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-        ClubResponseDTO.GetJoinRequestListDTO result = clubService.getJoinRequestListInfo(memberDetail.getMember(), clubId, pageable);
+        ClubResponseDTO.GetJoinRequestListDTO result = clubService.getJoinRequestListInfo(memberDetail.getMemberId(), clubId, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -157,7 +157,7 @@ public class ClubController {
                                                                   @RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size);
-        ClubResponseDTO.GetClubMemberAuthorityListDTO result = clubService.getClubAuthorityListInfo(memberDetail.getMember(), clubId, pageable);
+        ClubResponseDTO.GetClubMemberAuthorityListDTO result = clubService.getClubAuthorityListInfo(memberDetail.getMemberId(), clubId, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -168,7 +168,7 @@ public class ClubController {
     )
     public ResponseEntity<CommonResponse<?>> deleteMemberFromClub(@AuthenticationPrincipal MemberDetail memberDetail,
                                                                   @PathVariable Long clubId){
-        clubService.deleteMemberClub(memberDetail.getMember(), clubId);
+        clubService.deleteMemberClub(memberDetail.getMemberId(), clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
     }
 }

@@ -12,6 +12,7 @@ import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.MemberClubPolicy;
 import assemble.api.club.domain.Club;
 import assemble.api.club.domain.mapping.MemberClub;
+import assemble.api.member.business.finder.MemberFinder;
 import assemble.api.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,8 +29,10 @@ public class BoardService {
     private final MemberClubPolicy memberClubPolicy;
     private final MemberClubFinder memberClubFinder;
     private final BoardRepository boardRepository;
+    private final MemberFinder memberFinder;
 
-    public BoardResponseDTO.CreateBoardResultDTO createBoard(Member member, BoardRequestDTO.CreateBoardDTO request, Long clubId) {
+    public BoardResponseDTO.CreateBoardResultDTO createBoard(Long memberId, BoardRequestDTO.CreateBoardDTO request, Long clubId) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubPolicy.validateLeaderOrManager(memberClub);

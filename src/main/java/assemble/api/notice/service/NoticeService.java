@@ -5,6 +5,7 @@ import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.MemberClubPolicy;
 import assemble.api.club.domain.Club;
 import assemble.api.club.domain.mapping.MemberClub;
+import assemble.api.member.business.finder.MemberFinder;
 import assemble.api.member.domain.Member;
 import assemble.api.notice.business.factory.NoticeFactory;
 import assemble.api.notice.business.finder.NoticeFinder;
@@ -24,12 +25,14 @@ public class NoticeService {
 
     private final ClubFinder clubFinder;
     private final NoticeFinder noticeFinder;
+    private final MemberFinder memberFinder;
     private final MemberClubFinder memberClubFinder;
     private final NoticeFactory noticeFactory;
     private final MemberClubPolicy memberClubPolicy;
     private final NoticeRepository noticeRepository;
 
-    public NoticeResponseDTO.ClubNoticeResultDTO createClubNotice(Member member, Long clubId, NoticeRequestDTO.ClubNoticeDTO request) {
+    public NoticeResponseDTO.ClubNoticeResultDTO createClubNotice(Long memberId, Long clubId, NoticeRequestDTO.ClubNoticeDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
 
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
@@ -41,7 +44,8 @@ public class NoticeService {
         return NoticeConverter.toClubNoticeResultDTO(notice.getId(), club.getId());
     }
 
-    public NoticeResponseDTO.ClubNoticeListResultDTO getClubNoticeList(Member member, Long clubId) {
+    public NoticeResponseDTO.ClubNoticeListResultDTO getClubNoticeList(Long memberId, Long clubId) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
 
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);

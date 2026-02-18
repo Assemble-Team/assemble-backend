@@ -57,8 +57,8 @@ public class ClubService {
     private final MemberClubFactory memberClubFactory;
     private final MemberFinder memberFinder;
 
-    public ClubResponseDTO.ClubResultDTO createClub(Member member, ClubRequestDTO.CreateClubDTO request) {
-
+    public ClubResponseDTO.ClubResultDTO createClub(Long memberId, ClubRequestDTO.CreateClubDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFactory.create(request);
         clubRepository.save(club);
 
@@ -68,14 +68,16 @@ public class ClubService {
         return ClubConverter.toClubResultDTO(club.getId());
     }
 
-    public ClubResponseDTO.ClubResultDTO updateClub(Member member, Long clubId, ClubRequestDTO.UpdateClubDTO request) {
+    public ClubResponseDTO.ClubResultDTO updateClub(Long memberId, Long clubId, ClubRequestDTO.UpdateClubDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         clubPolicy.validateUpdateInfo(club, member);
         club.updateInfo(request);
         return ClubConverter.toClubResultDTO(club.getId());
     }
 
-    public ClubResponseDTO.ClubLikesResultDTO createClubLikes(Member member, Long clubId) {
+    public ClubResponseDTO.ClubLikesResultDTO createClubLikes(Long memberId, Long clubId) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         Optional<MemberLikesClub> memberLikesClub = memberLikesClubFinder.findByMemberAndClub(member.getId(), clubId);
 
@@ -84,26 +86,29 @@ public class ClubService {
         return ClubConverter.toClubLikesResultDTO(liked);
     }
 
-    public ClubResponseDTO.ClubDetailResultDTO getClubDetailInfo(Member member, Long clubId) {
+    public ClubResponseDTO.ClubDetailResultDTO getClubDetailInfo(Long memberId, Long clubId) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         Long likesNum = memberLikesClubFinder.countByClub(clubId);
         boolean liked = memberLikesClubFinder.existsByMemberAndClub(member.getId(), clubId);
         return ClubConverter.toClubDetailResultDTO(club, likesNum, liked);
     }
 
-    public ClubResponseDTO.FindClubListResultDTO getClubListInfo(Member member, String region, String category, String level, boolean recruiting, String sort, Pageable pageable) {
+    public ClubResponseDTO.FindClubListResultDTO getClubListInfo(Long memberId, String region, String category, String level, boolean recruiting, String sort, Pageable pageable) {
+        Member member = memberFinder.findById(memberId);
         Page<Club> clubPage = clubFinder.findClubs(region, category, level, recruiting, sort, pageable);
         Set<Long> likedClubIds = memberLikesClubFinder.findLikedClubsByMember(member.getId());
         return ClubConverter.toFindClubListResultDTO(clubPage, likedClubIds);
     }
 
-    public ClubResponseDTO.ClubMemberListResultDTO getClubMemberListInfo(Member member, Long clubId) {
+    public ClubResponseDTO.ClubMemberListResultDTO getClubMemberListInfo(Long clubId) {
         Club club = clubFinder.findByClubId(clubId);
         List<MemberClub> memberClubList = memberClubFinder.findByClub(club);
         return ClubConverter.toClubMemberListResultDTO(memberClubList, clubId);
     }
 
-    public void createJoinClubRequest(Member member, Long clubId, ClubRequestDTO.JoinRequestDTO request) {
+    public void createJoinClubRequest(Long memberId, Long clubId, ClubRequestDTO.JoinRequestDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         memberClubFinder.checkNotExistMemberClub(member, club);
 
@@ -112,7 +117,8 @@ public class ClubService {
     }
 
 
-    public void approveOrReject(Member member, Long clubId, ClubRequestDTO.ApproveOrRejectDTO request) {
+    public void approveOrReject(Long memberId, Long clubId, ClubRequestDTO.ApproveOrRejectDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubPolicy.validateLeaderOrManager(memberClub);
@@ -125,8 +131,8 @@ public class ClubService {
         memberClubRepository.save(newMemberClub);
     }
 
-    public void changeAuthority(Member member, Long clubId, ClubRequestDTO.ChangeMemberAuthorityDTO request) {
-
+    public void changeAuthority(Long memberId, Long clubId, ClubRequestDTO.ChangeMemberAuthorityDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubPolicy.validateLeaderOrManager(memberClub);
@@ -137,7 +143,8 @@ public class ClubService {
         joinMemberClub.changeRole(MemberClubValidator.parseRole(request.getAuthority()));
     }
 
-    public ClubResponseDTO.GetJoinRequestListDTO getJoinRequestListInfo(Member member, Long clubId, Pageable pageable) {
+    public ClubResponseDTO.GetJoinRequestListDTO getJoinRequestListInfo(Long memberId, Long clubId, Pageable pageable) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
 
@@ -146,7 +153,8 @@ public class ClubService {
         return ClubConverter.toGetJoinRequestListDTO(clubJoinRequestList);
     }
 
-    public ClubResponseDTO.GetClubMemberAuthorityListDTO getClubAuthorityListInfo(Member member, Long clubId, Pageable pageable) {
+    public ClubResponseDTO.GetClubMemberAuthorityListDTO getClubAuthorityListInfo(Long memberId, Long clubId, Pageable pageable) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
 
@@ -155,7 +163,8 @@ public class ClubService {
         return ClubConverter.toGetClubMemberAuthorityListDTO(memberClubPage);
     }
 
-    public void deleteMemberClub(Member member, Long clubId) {
+    public void deleteMemberClub(Long memberId, Long clubId) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubRepository.delete(memberClub);

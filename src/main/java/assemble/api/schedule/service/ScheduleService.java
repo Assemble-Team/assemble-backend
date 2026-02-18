@@ -5,6 +5,7 @@ import assemble.api.club.business.finder.MemberClubFinder;
 import assemble.api.club.business.policy.MemberClubPolicy;
 import assemble.api.club.domain.Club;
 import assemble.api.club.domain.mapping.MemberClub;
+import assemble.api.member.business.finder.MemberFinder;
 import assemble.api.member.business.finder.MemberScheduleFinder;
 import assemble.api.member.business.policy.MemberSchedulePolicy;
 import assemble.api.member.domain.Member;
@@ -38,13 +39,15 @@ public class ScheduleService {
     private final ClubFinder clubFinder;
     private final ScheduleFinder scheduleFinder;
     private final MemberScheduleFinder  memberScheduleFinder;
+    private final MemberFinder memberFinder;
     private final MemberClubFinder memberClubFinder;
     private final MemberClubPolicy memberClubPolicy;
     private final MemberSchedulePolicy memberSchedulePolicy;
     private final ScheduleFactory scheduleFactory;
     private final ScheduleRepository scheduleRepository;
 
-    public ScheduleResponseDTO.CreateScheduleResultDTO createSchedule(Member member, Long clubId, ScheduleRequestDTO.CreateScheduleDTO request) {
+    public ScheduleResponseDTO.CreateScheduleResultDTO createSchedule(Long memberId, Long clubId, ScheduleRequestDTO.CreateScheduleDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubPolicy.validateLeaderOrManager(memberClub);
@@ -55,7 +58,8 @@ public class ScheduleService {
         return ScheduleConverter.toCreateScheduleResultDTO(schedule.getId());
     }
 
-    public ScheduleResponseDTO.CreateScheduleResultDTO updateSchedule(Member member, Long clubId, Long scheduleId, ScheduleRequestDTO.UpdateScheduleDTO request) {
+    public ScheduleResponseDTO.CreateScheduleResultDTO updateSchedule(Long memberId, Long clubId, Long scheduleId, ScheduleRequestDTO.UpdateScheduleDTO request) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubPolicy.validateLeaderOrManager(memberClub);
@@ -66,7 +70,8 @@ public class ScheduleService {
         return ScheduleConverter.toCreateScheduleResultDTO(schedule.getId());
     }
 
-    public void deleteSchedule(Member member, Long clubId, Long scheduleId) {
+    public void deleteSchedule(Long memberId, Long clubId, Long scheduleId) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         MemberClub memberClub = memberClubFinder.findByMemberAndClub(member, club);
         memberClubPolicy.validateLeaderOrManager(memberClub);
@@ -75,7 +80,8 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
     }
 
-    public ScheduleResponseDTO.AttendScheduleResultDTO attendClubSchedule(Member member, Long clubId, Long scheduleId) {
+    public ScheduleResponseDTO.AttendScheduleResultDTO attendClubSchedule(Long memberId, Long clubId, Long scheduleId) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         memberClubFinder.findByMemberAndClub(member, club);
 
@@ -86,7 +92,8 @@ public class ScheduleService {
         return ScheduleConverter.toAttendScheduleResultDTO(attend);
     }
 
-    public ScheduleResponseDTO.GetScheduleListResultDTO getScheduleListInfo(Member member, Long clubId, Pageable pageable) {
+    public ScheduleResponseDTO.GetScheduleListResultDTO getScheduleListInfo(Long memberId, Long clubId, Pageable pageable) {
+        Member member = memberFinder.findById(memberId);
         Club club = clubFinder.findByClubId(clubId);
         memberClubFinder.findByMemberAndClub(member, club);
         
