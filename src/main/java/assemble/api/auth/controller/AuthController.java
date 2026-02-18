@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.AuthorizeRequestsDsl;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +27,9 @@ public class AuthController {
             summary = "로그인 API",
             description = "이메일, 비밀번호를 통해 로그인하는 API"
     )
-    public ResponseEntity<CommonResponse<AuthResponseDTO.LoginResultDTO>> login(@RequestBody @Valid AuthRequestDTO.LoginDTO loginDTO, HttpServletResponse response){
-        AuthResponseDTO.LoginResultDTO result = authService.loginMember(loginDTO, response);
+    public ResponseEntity<CommonResponse<AuthResponseDTO.LoginResultDTO>> login(@RequestBody @Valid AuthRequestDTO.LoginDTO request,
+                                                   HttpServletResponse response){
+        AuthResponseDTO.LoginResultDTO result = authService.loginMember(request, response);
         return ResponseEntity.ok().body(CommonResponse.onSuccess(result));
     }
 }
