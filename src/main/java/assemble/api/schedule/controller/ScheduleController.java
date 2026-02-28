@@ -31,7 +31,7 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<ScheduleResponseDTO.CreateScheduleResultDTO>> makeSchedule(@AuthenticationPrincipal MemberDetail memberDetail,
                                                                             @PathVariable Long clubId,
                                                                             @RequestBody @Valid ScheduleRequestDTO.CreateScheduleDTO request){
-        ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.createSchedule(memberDetail.getMember(), clubId, request);
+        ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.createSchedule(memberDetail.getMemberId(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -44,7 +44,7 @@ public class ScheduleController {
                                                             @PathVariable Long clubId,
                                                             @PathVariable Long scheduleId,
                                                             @RequestBody ScheduleRequestDTO.UpdateScheduleDTO request){
-        ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.updateSchedule(memberDetail.getMember(), clubId, scheduleId, request);
+        ScheduleResponseDTO.CreateScheduleResultDTO result = scheduleService.updateSchedule(memberDetail.getMemberId(), clubId, scheduleId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -56,7 +56,7 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<?>> deleteSchedule(@AuthenticationPrincipal MemberDetail memberDetail,
                                                             @PathVariable Long clubId,
                                                             @PathVariable Long scheduleId){
-        scheduleService.deleteSchedule(memberDetail.getMember(), clubId, scheduleId);
+        scheduleService.deleteSchedule(memberDetail.getMemberId(), clubId, scheduleId);
         return new ResponseEntity<>(CommonResponse.onSuccess(null), HttpStatus.OK);
     }
 
@@ -68,7 +68,7 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<ScheduleResponseDTO.AttendScheduleResultDTO>> attendSchedule(@AuthenticationPrincipal MemberDetail memberDetail,
                                                             @PathVariable Long clubId,
                                                             @PathVariable Long scheduleId){
-        ScheduleResponseDTO.AttendScheduleResultDTO result = scheduleService.attendClubSchedule(memberDetail.getMember(), clubId, scheduleId);
+        ScheduleResponseDTO.AttendScheduleResultDTO result = scheduleService.attendClubSchedule(memberDetail.getMemberId(), clubId, scheduleId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -82,7 +82,7 @@ public class ScheduleController {
                                                              @RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "startAt"));
-        ScheduleResponseDTO.GetScheduleListResultDTO result = scheduleService.getScheduleListInfo(memberDetail.getMember(), clubId, pageable);
+        ScheduleResponseDTO.GetScheduleListResultDTO result = scheduleService.getScheduleListInfo(memberDetail.getMemberId(), clubId, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 }

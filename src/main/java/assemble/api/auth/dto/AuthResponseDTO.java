@@ -21,4 +21,12 @@ public class AuthResponseDTO {
 
         private LocalDateTime createdAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FindPWResultDTO{
+        private String pw;
+    }
 }

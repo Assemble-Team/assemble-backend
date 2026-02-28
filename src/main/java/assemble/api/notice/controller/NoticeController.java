@@ -28,7 +28,7 @@ public class NoticeController {
     public ResponseEntity<CommonResponse<NoticeResponseDTO.ClubNoticeResultDTO>> makeClubNotice(@AuthenticationPrincipal MemberDetail memberDetail,
                                                                                                 @PathVariable Long clubId,
                                                                                                 @RequestBody @Valid NoticeRequestDTO.ClubNoticeDTO request){
-        NoticeResponseDTO.ClubNoticeResultDTO result = noticeService.createClubNotice(memberDetail.getMember(), clubId, request);
+        NoticeResponseDTO.ClubNoticeResultDTO result = noticeService.createClubNotice(memberDetail.getMemberId(), clubId, request);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class NoticeController {
     )
     public ResponseEntity<CommonResponse<NoticeResponseDTO.ClubNoticeListResultDTO>> getClubNotice(@AuthenticationPrincipal MemberDetail memberDetail,
                                                            @PathVariable Long clubId){
-        NoticeResponseDTO.ClubNoticeListResultDTO result = noticeService.getClubNoticeList(memberDetail.getMember(), clubId);
+        NoticeResponseDTO.ClubNoticeListResultDTO result = noticeService.getClubNoticeList(memberDetail.getMemberId(), clubId);
         return new ResponseEntity<>(CommonResponse.onSuccess(result), HttpStatus.OK);
     }
 }
