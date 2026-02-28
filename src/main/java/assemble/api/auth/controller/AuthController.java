@@ -5,6 +5,7 @@ import assemble.api.auth.dto.AuthRequestDTO;
 import assemble.api.auth.dto.AuthResponseDTO;
 import assemble.api.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,4 +42,16 @@ public class AuthController {
         authService.reissueToken(request, response);
         return ResponseEntity.ok().body(CommonResponse.onSuccess(null));
     }
+
+    @PostMapping("/logout")
+    @Operation(
+            summary = "로그아웃 API",
+            description = "로그아웃하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> logout(HttpServletRequest request){
+        authService.logoutMember(request);
+        return ResponseEntity.ok().body(CommonResponse.onSuccess(null));
+    }
+
+
 }

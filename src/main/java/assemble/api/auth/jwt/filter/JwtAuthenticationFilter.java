@@ -1,5 +1,7 @@
 package assemble.api.auth.jwt.filter;
 
+import assemble.api.apiPayload.handler.GeneralException;
+import assemble.api.apiPayload.status.JwtErrorStatus;
 import assemble.api.auth.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,7 +24,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(request);
+
         if(token != null){
+            if(jwtTokenProvider.isLogoutToken(token)){
+                throw new GeneralException(JwtErrorStatus.LOGOUT_EXPIRED);
+            }
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

@@ -14,6 +14,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +35,7 @@ public class JwtTokenProvider { // JWT 토큰 생성, 검증, 인증 객체 반�
 
     private final MemberDetailService memberDetailService;
     private final MemberFinder memberFinder;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Value("${jwt.token.secret}")
     private String secret;
@@ -119,4 +122,13 @@ public class JwtTokenProvider { // JWT 토큰 생성, 검증, 인증 객체 반�
         return new UsernamePasswordAuthenticationToken(memberDetail, null, memberDetail.getAuthorities());
     }
 
+    public boolean isLogoutToken(String token) {
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        String email = getEmail(token);
+        String logoutToken = (String) ops.get("LogOutToken"+email);
+        if(logoutToken == null || logoutToken.isEmpty()){
+            return false;
+        }
+        return true;
+    }
 }

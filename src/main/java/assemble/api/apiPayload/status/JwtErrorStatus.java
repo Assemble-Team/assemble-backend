@@ -13,6 +13,7 @@ public enum JwtErrorStatus implements ErrorReason {
     TOKEN_EXPIRED (HttpStatus.BAD_REQUEST, "JWT4003", "만료된 JWT 토큰입니다."),
     WRONG_TYPE_TOKEN(HttpStatus.BAD_REQUEST, "JWT4004", "지원되지 않는 JWT 토큰입니다."),
     NOT_VALID_TOKEN(HttpStatus.BAD_REQUEST, "JWT4005", "JWT 토큰이 잘못되었습니다."),
+    LOGOUT_EXPIRED(HttpStatus.BAD_REQUEST, "JWT4006", "로그아웃된 토큰입니다"),
     ;
 
     private final HttpStatus httpStatus;

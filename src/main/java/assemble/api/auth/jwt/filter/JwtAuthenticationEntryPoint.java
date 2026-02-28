@@ -6,7 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -17,8 +19,11 @@ import java.io.IOException;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 // 인증되지 않은 사용자가 요청을 줄 떄
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
@@ -26,7 +31,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         log.error("Not Authenticated Request", authException);
         CommonResponse<Object> apiResponse =
                 CommonResponse.onFailure(CommonErrorStatus._UNAUTHORIZED, null);
-        String responseBody = new ObjectMapper().writeValueAsString(apiResponse);
+        // String responseBody = new ObjectMapper().writeValueAsString(apiResponse);
+        String responseBody = objectMapper.writeValueAsString(apiResponse);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");

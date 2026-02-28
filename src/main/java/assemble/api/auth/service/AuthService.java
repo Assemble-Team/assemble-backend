@@ -10,6 +10,7 @@ import assemble.api.auth.jwt.JwtTokenProvider;
 import assemble.api.member.business.finder.MemberFinder;
 import assemble.api.member.domain.Member;
 import assemble.api.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -96,5 +97,14 @@ public class AuthService {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setHeader("Authorization", "Bearer " + access);
 
+    }
+
+    public void logoutMember(HttpServletRequest request) {
+        String token = jwtTokenProvider.resolveToken(request);
+        String email = jwtTokenProvider.getEmail(token);
+
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        ops.set("LogOutToken"+email, token);
+        redisTemplate.delete("RefreshToken"+email);
     }
 }
