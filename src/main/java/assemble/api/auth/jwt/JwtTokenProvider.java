@@ -10,6 +10,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,6 +76,10 @@ public class JwtTokenProvider { // JWT 토큰 생성, 검증, 인증 객체 반�
 
     public Long getRefreshExpiration(String token) {
         return parseClaims(token).getExpiration().getTime();
+    }
+
+    public String getEmail(String token){
+        return parseClaims(token).getSubject();
     }
 
     public Claims parseClaims(String token) {
