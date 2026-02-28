@@ -123,12 +123,13 @@ public class JwtTokenProvider { // JWT 토큰 생성, 검증, 인증 객체 반�
     }
 
     public boolean isLogoutToken(String token) {
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        String email = getEmail(token);
-        String logoutToken = (String) ops.get("LogOutToken"+email);
-        if(logoutToken == null || logoutToken.isEmpty()){
-            return false;
-        }
-        return true;
+        return Boolean.TRUE.equals(
+                redisTemplate.hasKey("Blacklist:" + token)
+        );
+    }
+
+    public long getRemainingExpiration(String token) {
+        Date expiration = parseClaims(token).getExpiration();
+        return expiration.getTime() - System.currentTimeMillis();
     }
 }

@@ -1,6 +1,7 @@
 package assemble.api.auth.controller;
 
 import assemble.api.apiPayload.CommonResponse;
+import assemble.api.auth.domain.MemberDetail;
 import assemble.api.auth.dto.AuthRequestDTO;
 import assemble.api.auth.dto.AuthResponseDTO;
 import assemble.api.auth.service.AuthService;
@@ -10,10 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -53,5 +52,13 @@ public class AuthController {
         return ResponseEntity.ok().body(CommonResponse.onSuccess(null));
     }
 
-
+    @DeleteMapping("/me")
+    @Operation(
+            summary = "회원탈퇴 API",
+            description = "회원탈퇴하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> delete(@AuthenticationPrincipal MemberDetail memberDetail){
+        authService.deleteMember(memberDetail.getEmail());
+        return ResponseEntity.ok().body(CommonResponse.onSuccess(null));
+    }
 }

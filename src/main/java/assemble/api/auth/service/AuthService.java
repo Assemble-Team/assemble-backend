@@ -9,9 +9,11 @@ import assemble.api.auth.dto.AuthResponseDTO;
 import assemble.api.auth.jwt.JwtTokenProvider;
 import assemble.api.member.business.finder.MemberFinder;
 import assemble.api.member.domain.Member;
+import assemble.api.member.repository.MemberRepository;
 import assemble.api.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,6 +34,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberDetailService memberDetailService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final MemberRepository memberRepository;
 
 
     public AuthResponseDTO.LoginResultDTO loginMember(AuthRequestDTO.LoginDTO request, HttpServletResponse response) {
@@ -101,10 +104,25 @@ public class AuthService {
 
     public void logoutMember(HttpServletRequest request) {
         String token = jwtTokenProvider.resolveToken(request);
-        String email = jwtTokenProvider.getEmail(token);
+        jwtTokenProvider.getEmail(token);
 
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        ops.set("LogOutToken"+email, token);
-        redisTemplate.delete("RefreshToken"+email);
+        long expiration = jwtTokenProvider.getRemainingExpiration(token);
+
+        redisTemplate.opsForValue().set(
+                "Blacklist:" + token,
+                "logout",
+                expiration,
+                TimeUnit.MILLISECONDS
+        );
+
+        String email = jwtTokenProvider.getEmail(token);
+        redisTemplate.delete("RefreshToken:" + email);
+    }
+
+    @Transactional
+    public void deleteMember(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new GeneralException(MemberErrorStatus.NOT_EXIST_EMAIL));
+        member.delete();
     }
 }
