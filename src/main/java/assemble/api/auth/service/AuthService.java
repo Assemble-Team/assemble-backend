@@ -69,4 +69,32 @@ public class AuthService {
         return AuthConverter.toLoginResultDTO(memberDetail.getMemberId(), refresh);
     }
 
+    public void reissueToken(AuthRequestDTO.ReissueDTO request, HttpServletResponse response) {
+        jwtTokenProvider.parseClaims(request.getRefreshToken());
+
+        String email = jwtTokenProvider.getEmail(request.getRefreshToken());
+
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        String refresh = (String) ops.get("RefreshToken"+email);
+        if(refresh == null || refresh.isEmpty() || !refresh.equals(request.getRefreshToken())){
+            throw new GeneralException(MemberErrorStatus.NOT_EXIST_REFRESH_TOKEN);
+        }
+
+        // 새 액세스 토큰 발급
+        MemberDetail memberDetail;
+        try{
+            memberDetail = memberDetailService.loadUserByUsername(email);
+        }catch(UsernameNotFoundException e){
+            throw new GeneralException(MemberErrorStatus.NOT_EXIST_EMAIL);
+        }
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetail, null);
+        String access = jwtTokenProvider.generateAccessToken(authentication);
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setHeader("Authorization", "Bearer " + access);
+
+    }
 }

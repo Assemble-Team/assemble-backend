@@ -1,6 +1,7 @@
 package assemble.api.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
@@ -19,6 +20,12 @@ public class AuthRequestDTO {
         @NotBlank(message = "비밀번호는 필수 입력입니다")
         private String password;
 
+    }
+
+    @Getter
+    public static class ReissueDTO{
+        @NotNull
+        private String refreshToken;
     }
 
 }

@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.AuthorizeRequestsDsl;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +30,15 @@ public class AuthController {
                                                    HttpServletResponse response){
         AuthResponseDTO.LoginResultDTO result = authService.loginMember(request, response);
         return ResponseEntity.ok().body(CommonResponse.onSuccess(result));
+    }
+
+    @PostMapping("/reissue")
+    @Operation(
+            summary = "토큰 재발급 API",
+            description = "액세스 토큰이 만료된 경우 리프레시 토큰을 통해서 액세스 토큰을 재발급 하는 API"
+    )
+    public ResponseEntity<CommonResponse<?>> reissue(@RequestBody @Valid AuthRequestDTO.ReissueDTO request, HttpServletResponse response){
+        authService.reissueToken(request, response);
+        return ResponseEntity.ok().body(CommonResponse.onSuccess(null));
     }
 }
