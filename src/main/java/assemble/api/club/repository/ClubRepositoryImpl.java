@@ -21,16 +21,19 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+
+
     @Override
-    public Page<Club> findClubsBy(String region, InterestCategory category, DifficultyLevel level, boolean recruiting, String sort, Pageable pageable) {
+    public Page<Club> findClubsBy(String region, InterestCategory category, List<DifficultyLevel> level, boolean recruiting, boolean online, String sort, Pageable pageable) {
         QClub club = QClub.club;
         List<Club> content = queryFactory
                 .selectFrom(club)
                 .where(
                         eqRegion(region),
                         eqCategory(category),
-                        eqDifficultyLevel(level),
-                        eqStatus(recruiting)
+                        eqStatus(recruiting),
+                        eqOnline(online),
+                        inLevel(level)
                 )
                 .orderBy(getSort(sort, club))
                 .offset(pageable.getOffset())
@@ -43,11 +46,18 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
                 .where(
                         eqRegion(region),
                         eqCategory(category),
-                        eqDifficultyLevel(level),
+                        inLevel(level),
+                        eqOnline(online),
                         eqStatus(recruiting)
                 )
                 .fetchOne();
         return  new PageImpl<>(content, pageable, total);
+    }
+
+    private BooleanExpression inLevel(List<DifficultyLevel> levels) {
+        return (levels == null || levels.isEmpty())
+                ? null
+                : QClub.club.level.in(levels);
     }
 
     private BooleanExpression eqRegion(String region) {
@@ -64,6 +74,10 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
 
     private BooleanExpression eqStatus(boolean status){
         return status ? QClub.club.status.eq(ClubStatus.RECRUTING) : null;
+    }
+
+    private BooleanExpression eqOnline(boolean online){
+        return online ? QClub.club.online.eq(true) : null;
     }
 
     private OrderSpecifier<?> getSort(String sort, QClub club) {

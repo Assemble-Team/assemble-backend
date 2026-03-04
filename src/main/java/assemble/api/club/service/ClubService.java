@@ -11,6 +11,7 @@ import assemble.api.club.business.policy.MemberClubPolicy;
 import assemble.api.club.business.validator.MemberClubValidator;
 import assemble.api.club.converter.ClubConverter;
 import assemble.api.club.domain.Club;
+import assemble.api.club.domain.enums.DifficultyLevel;
 import assemble.api.club.domain.mapping.ClubJoinRequest;
 import assemble.api.club.domain.mapping.MemberClub;
 import assemble.api.club.dto.ClubRequestDTO;
@@ -94,9 +95,9 @@ public class ClubService {
         return ClubConverter.toClubDetailResultDTO(club, likesNum, liked);
     }
 
-    public ClubResponseDTO.FindClubListResultDTO getClubListInfo(Long memberId, String region, String category, String level, boolean recruiting, String sort, Pageable pageable) {
+    public ClubResponseDTO.FindClubListResultDTO getClubListInfo(Long memberId, String region, String category, List<DifficultyLevel> level, boolean recruiting, boolean online, String sort, Pageable pageable) {
         Member member = memberFinder.findById(memberId);
-        Page<Club> clubPage = clubFinder.findClubs(region, category, level, recruiting, sort, pageable);
+        Page<Club> clubPage = clubFinder.findClubs(region, category, level, recruiting, online, sort, pageable);
         Set<Long> likedClubIds = memberLikesClubFinder.findLikedClubsByMember(member.getId());
         return ClubConverter.toFindClubListResultDTO(clubPage, likedClubIds);
     }

@@ -32,6 +32,9 @@ public class ClubRequestDTO {
         String description;
 
         String imageUrl;
+
+        @NotNull
+        boolean online;
     }
 
     @Builder

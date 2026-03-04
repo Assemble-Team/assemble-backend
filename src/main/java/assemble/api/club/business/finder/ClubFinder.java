@@ -4,6 +4,7 @@ import assemble.api.apiPayload.handler.GeneralException;
 import assemble.api.apiPayload.status.ClubErrorStatus;
 import assemble.api.club.business.policy.ClubPolicy;
 import assemble.api.club.domain.Club;
+import assemble.api.club.domain.enums.DifficultyLevel;
 import assemble.api.club.repository.ClubRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,8 +25,9 @@ public class ClubFinder {
                 .orElseThrow(() -> new GeneralException(ClubErrorStatus.NOT_EXIST_CLUB));
     }
 
-    public Page<Club> findClubs(String region, String category, String level, boolean recruiting, String sort, Pageable pageable) {
-        return clubRepository.findClubsBy(region, ClubPolicy.parseCategory(category), ClubPolicy.parseLevel(level), recruiting,  sort, pageable);
+    // clubPolicy.parseLevel 삭제 가능 여부 확인
+    public Page<Club> findClubs(String region, String category, List<DifficultyLevel> level, boolean recruiting, boolean online, String sort, Pageable pageable) {
+        return clubRepository.findClubsBy(region, ClubPolicy.parseCategory(category), level, recruiting, online, sort, pageable);
     }
 
 }

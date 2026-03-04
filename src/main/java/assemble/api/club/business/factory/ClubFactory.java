@@ -15,6 +15,7 @@ public class ClubFactory {
     public Club create(ClubRequestDTO.CreateClubDTO request) {
         return Club.builder()
                 .name(request.getName())
+                .online(request.isOnline())
                 .region(request.getRegion())
                 .level(ClubPolicy.parseLevel(request.getLevel()))
                 .interestCategory(ClubPolicy.parseCategory(request.getCategory()))

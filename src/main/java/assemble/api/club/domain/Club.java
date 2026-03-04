@@ -36,6 +36,9 @@ public class Club extends BaseEntity {
     @Column(nullable = false)
     private String region;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean online = false;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private DifficultyLevel level;

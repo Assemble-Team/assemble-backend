@@ -2,6 +2,7 @@ package assemble.api.club.controller;
 
 import assemble.api.apiPayload.CommonResponse;
 import assemble.api.auth.domain.MemberDetail;
+import assemble.api.club.domain.enums.DifficultyLevel;
 import assemble.api.club.dto.ClubRequestDTO;
 import assemble.api.club.dto.ClubResponseDTO;
 import assemble.api.club.service.ClubService;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/clubs")
@@ -76,13 +79,14 @@ public class ClubController {
     public ResponseEntity<CommonResponse<ClubResponseDTO.FindClubListResultDTO>> getClubList(@AuthenticationPrincipal MemberDetail memberDetail,
                                                          @RequestParam(required = false) String region,
                                                          @RequestParam(required = false) String category,
-                                                         @RequestParam(required = false) String level,
+                                                         @RequestParam(required = false) List<DifficultyLevel> level,
                                                          @RequestParam(required = false) boolean recruiting,
+                                                         @RequestParam(required = false) boolean online,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size,
                                                          @RequestParam(defaultValue = "latest") String sort){
         Pageable pageable = PageRequest.of(page, size);
-        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMemberId(), region, category, level, recruiting, sort, pageable);
+        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMemberId(), region, category, level, recruiting, online, sort, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
 
