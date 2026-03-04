@@ -21,16 +21,22 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    private BooleanExpression inLevel(List<DifficultyLevel> levels) {
+        return (levels == null || levels.isEmpty())
+                ? null
+                : QClub.club.level.in(levels);
+    }
+
     @Override
-    public Page<Club> findClubsBy(String region, InterestCategory category, DifficultyLevel level, boolean recruiting, String sort, Pageable pageable) {
+    public Page<Club> findClubsBy(String region, InterestCategory category, List<DifficultyLevel> level, boolean recruiting, String sort, Pageable pageable) {
         QClub club = QClub.club;
         List<Club> content = queryFactory
                 .selectFrom(club)
                 .where(
                         eqRegion(region),
                         eqCategory(category),
-                        eqDifficultyLevel(level),
-                        eqStatus(recruiting)
+                        eqStatus(recruiting),
+                        inLevel(level)
                 )
                 .orderBy(getSort(sort, club))
                 .offset(pageable.getOffset())
@@ -43,7 +49,7 @@ public class ClubRepositoryImpl implements ClubRepositoryCustom {
                 .where(
                         eqRegion(region),
                         eqCategory(category),
-                        eqDifficultyLevel(level),
+                        inLevel(level),
                         eqStatus(recruiting)
                 )
                 .fetchOne();
