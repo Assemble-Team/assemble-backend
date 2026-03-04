@@ -95,9 +95,9 @@ public class ClubService {
         return ClubConverter.toClubDetailResultDTO(club, likesNum, liked);
     }
 
-    public ClubResponseDTO.FindClubListResultDTO getClubListInfo(Long memberId, String region, String category, List<DifficultyLevel> level, boolean recruiting, String sort, Pageable pageable) {
+    public ClubResponseDTO.FindClubListResultDTO getClubListInfo(Long memberId, String region, String category, List<DifficultyLevel> level, boolean recruiting, boolean online, String sort, Pageable pageable) {
         Member member = memberFinder.findById(memberId);
-        Page<Club> clubPage = clubFinder.findClubs(region, category, level, recruiting, sort, pageable);
+        Page<Club> clubPage = clubFinder.findClubs(region, category, level, recruiting, online, sort, pageable);
         Set<Long> likedClubIds = memberLikesClubFinder.findLikedClubsByMember(member.getId());
         return ClubConverter.toFindClubListResultDTO(clubPage, likedClubIds);
     }

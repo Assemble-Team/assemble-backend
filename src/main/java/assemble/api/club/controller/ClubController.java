@@ -81,11 +81,12 @@ public class ClubController {
                                                          @RequestParam(required = false) String category,
                                                          @RequestParam(required = false) List<DifficultyLevel> level,
                                                          @RequestParam(required = false) boolean recruiting,
+                                                         @RequestParam(required = false) boolean online,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size,
                                                          @RequestParam(defaultValue = "latest") String sort){
         Pageable pageable = PageRequest.of(page, size);
-        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMemberId(), region, category, level, recruiting, sort, pageable);
+        ClubResponseDTO.FindClubListResultDTO result = clubService.getClubListInfo(memberDetail.getMemberId(), region, category, level, recruiting, online, sort, pageable);
         return new ResponseEntity<>(CommonResponse.onSuccess(result),  HttpStatus.OK);
     }
 

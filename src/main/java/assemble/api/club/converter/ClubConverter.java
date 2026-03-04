@@ -35,6 +35,7 @@ public class ClubConverter {
                 .imageUrl(club.getImageUrl())
                 .likesNum(likesNum)
                 .liked(liked)
+                .online(club.isOnline())
                 .build();
     }
 
@@ -66,6 +67,7 @@ public class ClubConverter {
                 .maxNumbers(club.getMaxNumbers())
                 .likes(club.getLikesCount())
                 .liked(liked)
+                .online(club.isOnline())
                 .build();
     }
 

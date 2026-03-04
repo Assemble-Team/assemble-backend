@@ -26,8 +26,8 @@ public class ClubFinder {
     }
 
     // clubPolicy.parseLevel 삭제 가능 여부 확인
-    public Page<Club> findClubs(String region, String category, List<DifficultyLevel> level, boolean recruiting, String sort, Pageable pageable) {
-        return clubRepository.findClubsBy(region, ClubPolicy.parseCategory(category), level, recruiting,  sort, pageable);
+    public Page<Club> findClubs(String region, String category, List<DifficultyLevel> level, boolean recruiting, boolean online, String sort, Pageable pageable) {
+        return clubRepository.findClubsBy(region, ClubPolicy.parseCategory(category), level, recruiting, online, sort, pageable);
     }
 
 }

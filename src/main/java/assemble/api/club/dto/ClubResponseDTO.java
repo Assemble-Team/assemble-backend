@@ -44,6 +44,7 @@ public class ClubResponseDTO {
         DifficultyLevel level;
         Long likesNum;
         boolean liked;
+        boolean online;
     }
 
     @Builder
@@ -75,6 +76,7 @@ public class ClubResponseDTO {
         Long maxNumbers;
         Long likes;
         boolean liked;
+        boolean online;
     }
 
     @Builder

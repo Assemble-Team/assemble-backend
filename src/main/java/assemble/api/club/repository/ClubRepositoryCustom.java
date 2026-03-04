@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ClubRepositoryCustom {
-    Page<Club> findClubsBy(String region, InterestCategory category, List<DifficultyLevel> level, boolean recruiting, String sort, Pageable pageable);
+    Page<Club> findClubsBy(String region, InterestCategory category, List<DifficultyLevel> level, boolean recruiting, boolean online, String sort, Pageable pageable);
 }
